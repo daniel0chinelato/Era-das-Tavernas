@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrição | Era das Tavernas</title>
+    <style>
+        /* =========================================
+           1. RESET E BASE
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
+        body, html { height: 100%; overflow: hidden; background-color: #050505; }
+
+        /* =========================================
+           2. O AMBIENTE 3D DA PORTA
+           ========================================= */
+        #door-container {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            perspective: 1500px; display: flex; z-index: 10; overflow: hidden;
+            background-color: transparent; transition: transform 3.5s ease-in-out, opacity 1.5s ease 2s;
+            transform-origin: center center;
+        }
+
+        .door {
+            width: 50%; height: 100%; position: absolute; top: 0;
+            background-image: url('porta-fechada.png'); background-size: 200% 100%; 
+            background-repeat: no-repeat; transition: transform 3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 11;
+        }
+
+        .left-door { left: 0; transform-origin: left center; background-position: left center; }
+        .right-door { right: 0; transform-origin: right center; background-position: right center; }
+
+        .door-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 15; text-align: center; transition: opacity 0.8s ease-out;
+            background: rgba(10, 5, 2, 0.7); padding: 30px; border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .title-door { color: #d4af37; font-size: 32px; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); margin-bottom: 30px; letter-spacing: 2px; }
+        
+        .enter-btn {
+            padding: 15px 40px; font-size: 12px; color: #fff; background-color: rgba(10, 5, 2, 0.8);
+            border: 2px solid #8c2425; cursor: pointer; text-transform: uppercase; letter-spacing: 3px; transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(140, 36, 37, 0.5);
+        }
+        .enter-btn:hover { background-color: #8c2425; box-shadow: 0 0 20px rgba(140, 36, 37, 0.8); }
+
+        .is-open .left-door { transform: rotateY(-105deg); }
+        .is-open .right-door { transform: rotateY(105deg); }
+        .is-open .door-content { opacity: 0; pointer-events: none; }
+        #door-container.is-open { transform: scale(2.8); opacity: 0; }
+
+        /* =========================================
+           3. O INTERIOR DA TAVERNA E NAVEGAÇÃO
+           ========================================= */
+        #tavern-screen {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('taverna-fundo.png'); background-size: cover;
+            background-position: center; display: flex; align-items: center; justify-content: center; z-index: 5;
+            perspective: 1000px;
+        }
+
+        /* TELA 1: ENVELOPE TELA INTEIRA */
+        #envelope-container {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #050505; 
+            background-image: url('envelope.png'); 
+            background-size: cover; 
+            background-position: center; background-repeat: no-repeat;
+            display: flex; align-items: center; justify-content: center; z-index: 8;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            opacity: 1; pointer-events: auto; transform: scale(1);
+        }
+        #envelope-container.hide-page { opacity: 0; pointer-events: none; transform: scale(1.1); }
+
+        /* CAIXAS DE CONTEÚDO (Regras e Formulário) */
+        .content-box {
+            width: 90%; max-width: 450px; padding: 40px; 
+            background: transparent !important; box-shadow: none !important; border: none !important;
+            position: absolute; transition: all 0.8s ease;
+        }
+
+        #text-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
+        #text-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        
+        #menu-form-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
+        #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+        /* =========================================
+           4. TIPOGRAFIA E BOTÕES (AJUSTADO PARA 12PX)
+           ========================================= */
+        .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
+
+        /* ADICIONADO MARGIN-TOP DE 40PX AQUI */
+        .scroll-area { max-height: 55vh; overflow-y: auto; margin-top: 40px; margin-bottom: 25px; padding-right: 15px; }
+        .scroll-area::-webkit-scrollbar { width: 8px; }
+        .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
+        .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+
+        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 12px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
+        .scroll-area h3 { color: #000000; font-family: 'Georgia', serif; font-size: 14px; margin: 30px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-decoration: underline; }
+
+        /* Formulário */
+        .input-group { margin-bottom: 18px; text-align: left; }
+        .input-group label { display: block; color: #000000; font-family: 'Georgia', serif; margin-bottom: 5px; font-weight: bold; font-size: 12px; letter-spacing: 1px; }
+        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 12px; font-weight: bold; outline: none; transition: border-color 0.3s; }
+        .input-group input:focus { border-bottom: 2px solid #8c2425; }
+
+        /* Botões Gerais */
+        .submit-btn { width: 100%; padding: 15px; background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; font-size: 12px; cursor: pointer; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); }
+        .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
+        
+        /* Botão Específico do Envelope */
+        #btn-open-envelope { width: auto; min-width: 250px; padding: 20px 40px; font-size: 14px; font-weight: bold; }
+
+        /* MENSAGEM DE SUCESSO */
+        #success-message { display: none; text-align: center; padding: 20px 0; }
+        #success-message h3 { color: #8c2425; font-size: 18px; margin-bottom: 15px; letter-spacing: 1px; }
+        #success-message p { color: #000; font-size: 14px; font-weight: bold; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <audio id="sfx-latch" src="https://actions.google.com/sounds/v1/doors/deadbolt_lock.ogg" preload="auto"></audio>
+    <audio id="sfx-door" src="https://actions.google.com/sounds/v1/doors/wood_door_open.ogg" preload="auto"></audio>
+    <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
+    
+    <audio id="sfx-tear" src="rasgo.mp3" preload="auto"></audio>
+    <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
+
+    <div id="door-container">
+        <div class="door left-door"></div>
+        <div class="door right-door"></div>
+        <div class="door-content">
+            <h1 class="title-door">ERA DAS TAVERNAS</h1>
+            <button class="enter-btn" id="btn-enter">Entrar na Taverna</button>
+        </div>
+    </div>
+
+    <div id="tavern-screen">
+        
+        <div id="envelope-container">
+            <button class="submit-btn" id="btn-open-envelope">Romper o Selo</button>
+        </div>
+
+        <div id="text-container" class="content-box">
+            <div class="scroll-area">
+                <p><strong>Fase de Grupos (MD1):</strong> Tiro curto e paulada rápida! Todos se enfrentam dentro do grupo em partida única. A escolha de deuses é Blind Pick (às cegas) e sem bans. O terreno selvagem será o Mapa Aleatório (Terra), selecionado diretamente dentro das opções do jogo. Apenas os 3 melhores de cada grupo avançam para a próxima era.</p>
+                <p><strong>Playoffs (MD3 - Single Elimination):</strong> O mata-mata começa pra valer e os qualificados enfrentam os Seeds (jogadores pré-ranqueados). Aqui a estratégia entra junto com o tacape: teremos Draft com Picks e Bans. Atenção máxima à regra de ouro da sobrevivência: você só pode usar um deus UMA ÚNICA VEZ. Usou na partida? Ele volta pra caverna e está extinto para você no resto do torneio, ganhando ou perdendo.</p>
+                <p><strong>Semi e Final (MD5):</strong> A mesma regra brutal dos Playoffs (Draft, Picks, Bans e deuses de uso único, sem repetição), mas em séries longas para testar quem tem pulmão de mamute. Como o panteão é rotativo, guarde bem seus trunfos, ou você chegará na grande final lutando de mãos vazias!</p>
+
+                <h3>REQUISITO DE ENTRADA</h3>
+                <p>Seu RR (Ranked Rating) precisa ser de no mínimo 1200.</p>
+                <p><em>Atenção: Você tem até o dia 01.04.2026 para atingir essa marca. Se no fechamento das inscrições estiver abaixo de 1200, você será extinto da lista de combate!</em></p>
+
+                <h3>DATAS E ENCONTROS</h3>
+                <p><strong>Inscrições:</strong> 16.03.2026 a 01.04.2026.</p>
+                <p><strong>Comunicação:</strong> A caça só acontece se os dois estiverem no Discord Oficial.</p>
+                <p>Guarda os dentes de sabre na algibeira e nos vemos na Idade da Pedra! Uga Buga e bom jogo!</p>
+            </div>
+            <button class="submit-btn" id="btn-next">Preencher Pintura Rupestre</button>
+        </div>
+
+        <div id="menu-form-container" class="content-box">
+            <h2 class="form-title">Inscrição</h2>
+            
+            <div id="success-message">
+                <h3>ALMA EMPENHADA!</h3>
+                <p>Sua pintura rupestre foi registrada na pedra.</p>
+                <p>Prepare seu tacape e nos vemos no Discord Oficial!</p>
+            </div>
+
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" 
+                  method="POST" 
+                  target="hidden_iframe" 
+                  id="registration-form">
+                
+                <div class="input-group">
+                    <label for="teste1">Teste 1</label>
+                    <input type="text" name="entry.659203104" id="teste1" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste2">Teste 2</label>
+                    <input type="text" name="entry.1748481037" id="teste2" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste3">Teste 3</label>
+                    <input type="text" name="entry.1264482586" id="teste3" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste4">Teste 4</label>
+                    <input type="text" name="entry.1329515624" id="teste4" autocomplete="off" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="btn-submit">Assinar Contrato</button>
+            </form>
+            
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. VERIFICA SE JÁ SE INSCREVEU (Bloqueio)
+        // -> COMENTADO PARA FASE DE TESTES! 
+        // -> Descomente este bloco inteiro na hora de publicar oficialmente.
+        // =========================================================================
+        /*
+        if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
+            document.getElementById('envelope-container').style.display = 'none';
+            document.getElementById('text-container').style.display = 'none';
+            document.getElementById('registration-form').style.display = 'none';
+            
+            document.getElementById('menu-form-container').classList.add('show-page');
+            document.getElementById('success-message').style.display = 'block';
+        }
+        */
+
+        // 2. ABRIR O ENVELOPE (Toca rasgo.mp3 local ajustado)
+        document.getElementById('btn-open-envelope').addEventListener('click', function() {
+            
+            const sfxTear = document.getElementById('sfx-tear');
+            sfxTear.currentTime = 0;
+            sfxTear.volume = 0.4; 
+            sfxTear.playbackRate = 1.8; 
+            sfxTear.play().catch(e => console.log("Áudio bloqueado:", e));
+
+            document.getElementById('envelope-container').classList.add('hide-page');
+            setTimeout(() => {
+                document.getElementById('envelope-container').style.display = 'none'; 
+                document.getElementById('text-container').classList.add('show-page');
+            }, 500); 
+        });
+
+        // 3. IR PARA O FORMULÁRIO
+        document.getElementById('btn-next').addEventListener('click', function() {
+            document.getElementById('text-container').classList.remove('show-page');
+            document.getElementById('text-container').classList.add('hide-page');
+            setTimeout(() => {
+                document.getElementById('menu-form-container').classList.add('show-page');
+            }, 500);
+        });
+
+        // 4. CONTROLE DE ENVIO E ÁUDIO DA CANETA (Toca assinatura.mp3 local)
+        var submitted = false;
+        document.getElementById('registration-form').addEventListener('submit', function() {
+            submitted = true;
+            document.getElementById('btn-submit').innerText = "Assinando na pedra...";
+            
+            const sfxSigning = document.getElementById('sfx-signing');
+            sfxSigning.currentTime = 0;
+            sfxSigning.volume = 1.0;
+            sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
+        });
+
+        document.getElementById('hidden_iframe').addEventListener('load', function() {
+            if (submitted) {
+                document.getElementById('registration-form').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+                
+                // =========================================================================
+                // GRAVA A INSCRIÇÃO NO NAVEGADOR
+                // -> COMENTADO PARA FASE DE TESTES!
+                // -> Descomente a linha abaixo na hora de publicar oficialmente.
+                // =========================================================================
+                // localStorage.setItem('inscrito_era_tavernas', 'true');
+                
+                submitted = false; 
+            }
+        });
+
+        // 5. LÓGICA DA PORTA E TAVERNA
+        document.getElementById('btn-enter').addEventListener('click', function() {
+            const doorContainer = document.getElementById('door-container');
+            const sfxLatch = document.getElementById('sfx-latch');
+            const sfxDoor = document.getElementById('sfx-door');
+            const sfxTavern = document.getElementById('sfx-tavern');
+
+            this.style.pointerEvents = 'none';
+            sfxLatch.volume = 1.0;
+            sfxLatch.play().catch(e => console.log("Áudio bloqueado:", e));
+
+            setTimeout(() => {
+                sfxDoor.volume = 0.8;
+                sfxDoor.play().catch(e => console.log("Áudio bloqueado:", e));
+                sfxTavern.volume = 0.3;
+                sfxTavern.play().catch(e => console.log("Áudio bloqueado:", e));
+                doorContainer.classList.add('is-open');
+
+                setTimeout(() => {
+                    doorContainer.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 3600); 
+            }, 600); 
+        });
+    </script>
+</body>
+</html>
