@@ -62,18 +62,16 @@
             transition: opacity 0.5s ease;
         }
 
-        /* AJUSTE FINO E ESTRUTURA FLEXBOX (Para forçar o scroll e blindar o botão) */
+        /* AJUSTE FINO: Lado esquerdo ancorado, cresce para a direita */
         .content-box {
             width: 90%; 
-            max-width: 410px; /* Mais largo para a esquerda */
-            height: 65vh; /* Altura fixa obrigatória para a rolagem funcionar */
-            padding: 0 20px; /* Zerei o padding de cima para colar no topo */
-            margin-left: 2%; /* Alinhamento centralizado no pergaminho */
-            margin-top: 15vh; /* Desci a caixa inteira na tela */
+            max-width: 450px; /* Aumentado para expandir mais à direita */
+            height: 65vh; 
+            padding: 0 20px; 
+            margin-left: 5%; /* Compensa o aumento de largura, ancorando a esquerda */
+            margin-top: 15vh; 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
-            
-            /* A mágica que impede sobreposição: */
             display: flex;
             flex-direction: column;
         }
@@ -85,14 +83,13 @@
         #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         /* =========================================
-           5. TIPOGRAFIA E BOTÕES (12PX)
+           5. TIPOGRAFIA E BOTÕES (FONTE 11PX)
            ========================================= */
         .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* Área de Rolagem Forçada */
         .scroll-area { 
-            flex: 1; /* Preenche todo o espaço possível da caixa */
-            overflow-y: auto; /* FORÇA o aparecimento da barra de rolagem (slide) */
+            flex: 1; 
+            overflow-y: auto; 
             margin-top: 10px; 
             margin-bottom: 15px; 
             padding-right: 15px; 
@@ -101,20 +98,21 @@
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
         .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 
-        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 12px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
-        .scroll-area h3 { color: #000000; font-family: 'Georgia', serif; font-size: 14px; margin: 30px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-decoration: underline; }
+        /* Textos em 11px */
+        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 11px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
+        .scroll-area h3 { color: #000000; font-family: 'Georgia', serif; font-size: 13px; margin: 30px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-decoration: underline; }
 
-        /* Formulário */
+        /* Formulário em 11px */
         .input-group { margin-bottom: 18px; text-align: left; }
-        .input-group label { display: block; color: #000000; font-family: 'Georgia', serif; margin-bottom: 5px; font-weight: bold; font-size: 12px; letter-spacing: 1px; }
-        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 12px; font-weight: bold; outline: none; transition: border-color 0.3s; }
+        .input-group label { display: block; color: #000000; font-family: 'Georgia', serif; margin-bottom: 5px; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
+        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 11px; font-weight: bold; outline: none; transition: border-color 0.3s; }
         .input-group input:focus { border-bottom: 2px solid #8c2425; }
 
-        /* Botões Gerais (Menores e Protegidos) */
+        /* Botões Gerais */
         .submit-btn { 
-            flex-shrink: 0; /* Impede que o botão seja esmagado pelo texto */
+            flex-shrink: 0; 
             width: 100%; 
-            padding: 10px; /* Reduzi o botão para sobrar espaço pro texto */
+            padding: 10px; 
             background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; 
             font-size: 11px; 
             cursor: pointer; transition: all 0.3s; margin-top: auto; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
@@ -122,7 +120,7 @@
         .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
         
         /* =========================================
-           MENSAGEM DE SUCESSO (TOPO E CENTRALIZADA)
+           MENSAGEM DE SUCESSO
            ========================================= */
         #success-message { 
             display: none; 
