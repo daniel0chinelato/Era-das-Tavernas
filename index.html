@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscrição | Tavernas</title>
+    <title>Inscrição | Era das Tavernas</title>
     <style>
         /* =========================================
            1. RESET E BASE
@@ -12,170 +12,355 @@
         body, html { height: 100%; overflow: hidden; background-color: #050505; }
 
         /* =========================================
-           2. CLASSES PARA TELAS CHEIAS
+           2. CLASSES PARA TELAS CHEIAS (VÍDEOS E IMAGENS)
            ========================================= */
         .full-screen {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            /* Fundo com as mãos segurando o pergaminho */
-            background: url('image_2.png') center/cover no-repeat;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: opacity 0.5s ease, background-image 0.8s ease; 
+        }
+
+        .full-video {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            object-fit: cover; background-color: #000; display: none;
+        }
+
+        /* Dicas piscando para o jogador saber que deve clicar */
+        .click-hint::after {
+            color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
+            margin-top: 40vh; font-family: sans-serif; text-align: center;
+            animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; }
+        }
+
+        /* =========================================
+           3. CAMADAS (Z-INDEX)
+           ========================================= */
+        #intro-screen { background-image: url('inicio.jpeg'); z-index: 70; }
+        #intro-screen::after { content: "CLIQUE PARA INICIAR"; }
+        
+        #intro-video { z-index: 65; }
+
+        #envelope-screen { background-image: url('envelope.jpeg'); z-index: 60; display: none; }
+        #envelope-screen::after { content: "CLIQUE NO ENVELOPE"; margin-top: 60vh;}
+
+        #romper-video { z-index: 55; }
+
+        #assinatura-video { z-index: 100; } 
+
+        /* =========================================
+           4. TAVERNA E NAVEGAÇÃO HTML (FUNDO FIXO)
+           ========================================= */
+        #tavern-screen {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('regras.jpeg'); background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+
+        /* CAIXA DE CONTEÚDO */
+        .content-box {
+            width: 90%; 
+            max-width: 420px; 
+            height: 50vh; 
+            padding: 0 20px 0 45px; 
+            margin-left: 4%; 
+            margin-top: calc(15vh + 180px); 
+            background: transparent !important; box-shadow: none !important; border: none !important;
+            position: absolute; transition: all 0.8s ease;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
         }
+
+        #text-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
+        #text-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        
+        #menu-form-container { opacity: 0; pointer-events: none; transform: translateY(30px); justify-content: center; }
+        #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         /* =========================================
-           3. IMAGEM ABSOLUTA (Placeholder: Lareira)
+           5. TIPOGRAFIA E BOTÕES
            ========================================= */
-        .contract-image {
+        .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
+
+        /* IMAGEM ABSOLUTA (Flutuando no canto esquerdo) */
+        .top-image-absolute {
             position: absolute;
-            top: 15%; /* Posicionado no topo do pergaminho */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 25%; /* Aproximadamente 1/4 da largura da tela */
-            height: 20%; /* Aproximadamente 1/5 da altura da tela */
-            /* Usando a lareira como imagem de exemplo */
-            background: url('image_1.png') center/cover no-repeat;
-            border: 5px solid #d4af37; /* Borda dourada */
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            z-index: 5;
+            top: -10px; /* Ajuste para subir ou descer a imagem */
+            left: 0px;  /* Ajuste para jogar mais para a esquerda/direita */
+            width: 80px; /* Tamanho do retângulo verde */
+            height: 80px;
+            object-fit: contain;
+            z-index: 15;
+            pointer-events: none; /* Para não bloquear o scroll com o dedo */
         }
 
-        /* =========================================
-           4. CONTAINER DE TEXTO COM SCROLL
-           ========================================= */
-        #contract-text-container {
-            position: absolute;
-            top: 40%; /* Começar abaixo da imagem absoluta */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40%; /* Largura do pergaminho central */
-            height: 35%; /* Altura fixa para o scroll funcionar */
-            background: transparent;
-            z-index: 10;
+        .scroll-area { 
+            flex: 1; 
+            overflow-y: auto; 
+            margin-top: 10px; 
+            margin-bottom: 15px; 
+            padding-right: 15px; 
         }
-
-        .scroll-area {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            padding: 20px;
-            text-align: left;
-        }
-
-        /* Estilização da barra de rolagem */
         .scroll-area::-webkit-scrollbar { width: 8px; }
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
         .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 
-        .scroll-area h3 {
-            color: #000000;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.2);
-        }
+        /* Textos em 14px */
+        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 14px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
+        .scroll-area h3, .scroll-area h4 { color: #000000; font-family: 'Georgia', serif; font-size: 16px; margin: 10px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
 
-        .scroll-area h4 {
-            color: #000000;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-decoration: underline;
-        }
+        /* Formulário em 11px */
+        .input-group { margin-bottom: 18px; text-align: left; }
+        .input-group label { display: block; color: #000000; font-family: 'Georgia', serif; margin-bottom: 5px; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
+        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 11px; font-weight: bold; outline: none; transition: border-color 0.3s; }
+        .input-group input:focus { border-bottom: 2px solid #8c2425; }
 
-        .scroll-area p {
-            color: #000000;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-weight: normal;
+        /* Botões Gerais */
+        .submit-btn { 
+            flex-shrink: 0; 
+            width: 100%; 
+            padding: 10px; 
+            background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; 
+            font-size: 11px; 
+            cursor: pointer; transition: all 0.3s; margin-top: auto; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
         }
-
+        .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
+        
         /* =========================================
-           5. BOTÃO
+           MENSAGEM DE SUCESSO
            ========================================= */
-        .submit-btn {
-            position: absolute;
-            top: 80%; /* Ajustado para ficar no final do pergaminho */
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 25px;
-            background-color: #0a0502;
-            color: #d4af37;
-            font-family: 'Georgia', serif;
-            border: 2px solid #8c2425;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8);
-            z-index: 10;
+        #success-message { 
+            display: none; 
+            position: absolute; 
+            top: 12%; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 100%;
+            text-align: center; 
+            z-index: 120; 
         }
-
-        .submit-btn:hover {
-            background-color: #8c2425;
-            color: #fff;
-            box-shadow: 0 0 25px rgba(140, 36, 37, 0.9);
+        #success-message h3 { 
+            color: #ffffff; 
+            font-size: 26px; 
+            margin-bottom: 15px; 
+            letter-spacing: 2px; 
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.9); 
         }
-
-        /* =========================================
-           6. RESPONSIVIDADE (MOBILE)
-           ========================================= */
-        @media (max-width: 768px) {
-            #contract-text-container {
-                width: 70%;
-                height: 40%;
-                top: 35%;
-            }
-            .contract-image {
-                width: 50%;
-                height: 25%;
-                top: 10%;
-            }
-            .scroll-area p {
-                font-size: 12px;
-            }
-            .submit-btn {
-                font-size: 12px;
-                letter-spacing: 2px;
-                top: 85%;
-            }
+        #success-message p { 
+            color: #ffffff; 
+            font-size: 16px; 
+            font-weight: bold; 
+            line-height: 1.5; 
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.9); 
         }
     </style>
 </head>
 <body>
 
-    <div id="tavern-screen" class="full-screen">
+    <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
+    <audio id="sfx-tear" src="rasgo.mp3" preload="auto"></audio>
+    <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
+
+    <div id="intro-screen" class="full-screen click-hint"></div>
+    
+    <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
+
+    <div id="envelope-screen" class="full-screen click-hint"></div>
+
+    <video id="romper-video" class="full-video" src="romper-selo.mp4" playsinline></video>
+
+    <video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline></video>
+
+
+    <div id="tavern-screen">
         
-        <div class="contract-image"></div>
-
-        <div id="contract-text-container">
-            <div class="scroll-area">
-                <h3>Fase de Grupos (MD1): Tiro curto e paulada rápida!</h3>
-                <p>Todos se enfrentam dentro do grupo em partida única. A escolha de deuses é Blind Pick (às cegas) e sem bans. O terreno selvagem será o Mapa Aleatório (Terra), selecionado diretamente dentro das opções do jogo. Apenas os 3 melhores de cada grupo avançam para a próxima era.</p>
-
-                <h4>Playoffs (MD3 - Single Elimination):</h4>
-                <p>O mata-mata começa pra valer e os qualificados enfrentam os Seeds (jogadores pré-ranqueados). Aqui a estratégia entra junto com o tacape: teremos Draft com Picks e Bans. Atenção máxima à regra de ouro da sobrevivência: você só pode usar um deus UMA ÚNICA VEZ. Usou na partida? Ele volta pra caverna e está extinto para você no resto do torneio, ganhando ou perdendo.</p>
-
-                <h4>Semi e Final (MD5):</h4>
-                <p>A mesma regra brutal dos Playoffs (Draft, Picks, Bans e deuses de uso único, sem repetição), mas em séries longas para testar quem tem pulmão de mamute. Como o panteão é rotativo, guarde bem seus trunfos, ou você chegará na grande final lutando de mãos vazias!</p>
-
-                <h4>REQUISITO DE ENTRADA</h4>
-                <p>Seu RR (Ranked Rating) precisa ser de no mínimo 1200.</p>
-            </div>
+        <div id="success-message">
+            <h3>O PACTO FOI SELADO!</h3>
+            <p>Vosso nome foi gravado a sangue no códice e o vosso assento na justa está assegurado.</p>
+            <p>Afiai vossas lâminas nas penumbras e aguardai o soar dos tambores de guerra.</p>
         </div>
 
-        <button class="submit-btn" id="btn-submit">PREENCHER PINTURA RUPESTRE</button>
-        
+        <div id="text-container" class="content-box">
+            
+            <img src="logo-transparente.png" alt="Selo" class="top-image-absolute">
+
+            <div class="scroll-area">
+                <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
+                <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
+                <p>Vossa glória há de ser forjada sob as penumbras de nossa estalagem. E sabei vós: caso a ruína vos acometa no prélio, as antigas leis vos facultam rogar pela mesma divindade, para que a vossa vindita se cumpra na arena.</p> 
+                <p>Aponde vossa insígnia de sangue neste pergaminho e aceitai o vosso fado.</p>
+            </div>
+            <button class="submit-btn" id="btn-next">Preencher Contrato</button>
+        </div>
+
+        <div id="menu-form-container" class="content-box">
+            <h2 class="form-title" id="titulo-form">Inscrição</h2>
+            
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" 
+                  method="POST" 
+                  target="hidden_iframe" 
+                  id="registration-form">
+                
+                <div class="input-group">
+                    <label for="teste1">Teste 1</label>
+                    <input type="text" name="entry.659203104" id="teste1" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste2">Teste 2</label>
+                    <input type="text" name="entry.1748481037" id="teste2" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste3">Teste 3</label>
+                    <input type="text" name="entry.1264482586" id="teste3" autocomplete="off" required>
+                </div>
+                <div class="input-group">
+                    <label for="teste4">Teste 4</label>
+                    <input type="text" name="entry.1329515624" id="teste4" autocomplete="off" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="btn-submit">Assinar Contrato</button>
+            </form>
+            
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+        </div>
     </div>
 
+    <script>
+        // =========================================================================
+        // O ROTEIRO DE TRANSIÇÕES (IMAGEM > VÍDEO > HTML)
+        // =========================================================================
+        
+        const introScreen = document.getElementById('intro-screen');
+        const introVideo = document.getElementById('intro-video');
+        
+        const envelopeScreen = document.getElementById('envelope-screen');
+        const romperVideo = document.getElementById('romper-video');
+        
+        const regrasHtml = document.getElementById('text-container');
+        const formContainer = document.getElementById('menu-form-container');
+        const tavernScreen = document.getElementById('tavern-screen'); 
+        
+        const assinaturaVideo = document.getElementById('assinatura-video');
+        const sfxTavern = document.getElementById('sfx-tavern');
+
+        // PASSO 1: Clica no Início -> Roda animation.mp4
+        introScreen.addEventListener('click', function() {
+            introVideo.style.display = 'block';
+            introVideo.play().catch(e => console.log("Erro no vídeo inicial:", e));
+            
+            introScreen.style.opacity = '0';
+            setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
+        });
+
+        // PASSO 2: animation.mp4 Acaba -> Mostra envelope.jpeg e Toca som da Taverna
+        introVideo.addEventListener('ended', function() {
+            sfxTavern.volume = 0.3;
+            sfxTavern.play().catch(e => console.log("Áudio ambiente bloqueado:", e));
+
+            envelopeScreen.style.display = 'flex'; 
+            introVideo.style.display = 'none'; 
+        });
+
+        // PASSO 3: Clica em envelope.jpeg -> Toca rasgo E roda romper-selo.mp4
+        envelopeScreen.addEventListener('click', function() {
+            const sfxTear = document.getElementById('sfx-tear');
+            sfxTear.currentTime = 0;
+            sfxTear.volume = 0.4; 
+            sfxTear.playbackRate = 1.8; 
+            sfxTear.play().catch(e => console.log("Áudio bloqueado:", e));
+
+            romperVideo.style.display = 'block';
+            romperVideo.play().catch(e => console.log("Erro no vídeo do selo:", e));
+            
+            envelopeScreen.style.opacity = '0';
+            setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
+        });
+
+        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
+        romperVideo.addEventListener('ended', function() {
+            tavernScreen.style.opacity = '1'; 
+            
+            romperVideo.style.transition = 'opacity 0.5s ease';
+            romperVideo.style.opacity = '0';
+            setTimeout(() => {
+                romperVideo.style.display = 'none';
+                regrasHtml.classList.add('show-page');
+            }, 500);
+        });
+
+        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
+        document.getElementById('btn-next').addEventListener('click', function() {
+            regrasHtml.classList.remove('show-page');
+            regrasHtml.classList.add('hide-page');
+            setTimeout(() => {
+                formContainer.classList.add('show-page');
+            }, 500);
+        });
+
+        // PASSO 6: Assina o Formulário -> Toca som da caneta E roda assinatura-final.mp4
+        var submitted = false;
+        document.getElementById('registration-form').addEventListener('submit', function() {
+            submitted = true;
+            document.getElementById('btn-submit').innerText = "Assinando na pedra...";
+            
+            const sfxSigning = document.getElementById('sfx-signing');
+            sfxSigning.currentTime = 0;
+            sfxSigning.volume = 1.0;
+            sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
+
+            formContainer.classList.remove('show-page');
+            assinaturaVideo.style.display = 'block';
+            assinaturaVideo.play().catch(e => console.log("Erro no vídeo final:", e));
+        });
+
+        // PASSO 7: assinatura-final.mp4 Acaba -> Mostra mensagem de sucesso e final.jpeg
+        assinaturaVideo.addEventListener('ended', function() {
+            assinaturaVideo.style.transition = 'opacity 1s ease';
+            assinaturaVideo.style.opacity = '0';
+            
+            // Troca o fundo dinamicamente para final.jpeg
+            tavernScreen.style.backgroundImage = "url('final.jpeg')";
+            
+            // Ativa a mensagem de sucesso
+            document.getElementById('success-message').style.display = 'block';
+
+            setTimeout(() => { assinaturaVideo.style.display = 'none'; }, 1000);
+        });
+
+        document.getElementById('hidden_iframe').addEventListener('load', function() {
+            if (submitted) {
+                // =========================================================================
+                // GRAVA A INSCRIÇÃO NO NAVEGADOR (Comentado para testes)
+                // localStorage.setItem('inscrito_era_tavernas', 'true');
+                // =========================================================================
+                submitted = false; 
+            }
+        });
+
+        // =========================================================================
+        // VERIFICA SE JÁ SE INSCREVEU (Bloqueio - Comentado para testes)
+        // =========================================================================
+        /*
+        if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('intro-video').style.display = 'none';
+            document.getElementById('envelope-screen').style.display = 'none';
+            document.getElementById('romper-video').style.display = 'none';
+            document.getElementById('text-container').style.display = 'none';
+            document.getElementById('menu-form-container').style.display = 'none';
+            
+            tavernScreen.style.opacity = '1';
+            tavernScreen.style.backgroundImage = "url('final.jpeg')";
+            
+            document.getElementById('success-message').style.display = 'block';
+        }
+        */
+    </script>
 </body>
 </html>
