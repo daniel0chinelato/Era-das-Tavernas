@@ -26,7 +26,6 @@
             object-fit: cover; background-color: #000; display: none;
         }
 
-        /* Dicas piscando para o jogador saber que deve clicar */
         .click-hint::after {
             color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
             margin-top: 40vh; font-family: sans-serif; text-align: center;
@@ -63,32 +62,38 @@
             transition: opacity 0.5s ease;
         }
 
-        /* AJUSTE FINO DO BOX DE CONTEÚDO (Posição e Largura) */
+        /* AJUSTE FINO E ESTRUTURA FLEXBOX (Para forçar o scroll e blindar o botão) */
         .content-box {
             width: 90%; 
-            max-width: 390px; /* Esticado mais para a esquerda */
-            padding: 15px 20px; /* Topo e base reduzidos para sobrar espaço */
-            margin-left: 4%; /* Centraliza melhor no pergaminho */
-            margin-top: 8vh; /* Desce a caixa inteira na tela */
+            max-width: 410px; /* Mais largo para a esquerda */
+            height: 65vh; /* Altura fixa obrigatória para a rolagem funcionar */
+            padding: 0 20px; /* Zerei o padding de cima para colar no topo */
+            margin-left: 2%; /* Alinhamento centralizado no pergaminho */
+            margin-top: 15vh; /* Desci a caixa inteira na tela */
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
+            
+            /* A mágica que impede sobreposição: */
+            display: flex;
+            flex-direction: column;
         }
 
         #text-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
         #text-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
         
-        #menu-form-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
+        #menu-form-container { opacity: 0; pointer-events: none; transform: translateY(30px); justify-content: center; }
         #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         /* =========================================
-           5. TIPOGRAFIA E BOTÕES (AJUSTADOS)
+           5. TIPOGRAFIA E BOTÕES (12PX)
            ========================================= */
         .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* Espaço de rolagem otimizado */
+        /* Área de Rolagem Forçada */
         .scroll-area { 
-            max-height: 58vh; /* Ganhou altura com o botão menor */
-            margin-top: 10px; /* Reduzido o vazio no topo do texto */
+            flex: 1; /* Preenche todo o espaço possível da caixa */
+            overflow-y: auto; /* FORÇA o aparecimento da barra de rolagem (slide) */
+            margin-top: 10px; 
             margin-bottom: 15px; 
             padding-right: 15px; 
         }
@@ -105,13 +110,14 @@
         .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 12px; font-weight: bold; outline: none; transition: border-color 0.3s; }
         .input-group input:focus { border-bottom: 2px solid #8c2425; }
 
-        /* Botões Gerais (Reduzidos para salvar espaço) */
+        /* Botões Gerais (Menores e Protegidos) */
         .submit-btn { 
+            flex-shrink: 0; /* Impede que o botão seja esmagado pelo texto */
             width: 100%; 
-            padding: 12px; /* Reduzido o botão para dar mais espaço ao texto */
+            padding: 10px; /* Reduzi o botão para sobrar espaço pro texto */
             background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; 
-            font-size: 11px; /* Fonte ligeiramente menor no botão */
-            cursor: pointer; transition: all 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
+            font-size: 11px; 
+            cursor: pointer; transition: all 0.3s; margin-top: auto; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
         }
         .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
         
