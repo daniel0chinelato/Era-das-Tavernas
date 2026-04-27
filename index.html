@@ -63,14 +63,14 @@
             transition: opacity 0.5s ease;
         }
 
-        /* AJUSTE FINO: Lado esquerdo afastado, caixa rebaixada e altura compensada */
+        /* AJUSTE FINO: Margem esquerda em 6% */
         .content-box {
             width: 90%; 
-            max-width: 420px; /* Levemente reduzido para não estourar a direita */
-            height: 50vh; /* Altura reduzida para compensar a descida da caixa */
-            padding: 0 20px 0 45px; /* 45px de padding na esquerda para afastar da borda */
-            margin-left: 8%; /* Empurrado um pouco mais para a direita */
-            margin-top: calc(15vh + 180px); /* Descendo os ~180px solicitados */
+            max-width: 420px; 
+            height: 50vh; 
+            padding: 0 20px 0 45px; 
+            margin-left: 6%; /* Ajustado para 6% conforme pedido */
+            margin-top: calc(15vh + 180px); 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
             display: flex;
@@ -99,9 +99,18 @@
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
         .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 
+        /* Imagem transparente no topo do texto */
+        .top-image {
+            width: 100%;
+            max-height: 80px; /* Impede que a imagem fique alta demais e esmague o texto */
+            object-fit: contain; /* Mantém a proporção da imagem sem distorcer */
+            margin: 0 auto 15px auto; /* Centraliza e dá espaço em baixo */
+            display: block;
+        }
+
         /* Textos em 11px */
-        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 14px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
-        .scroll-area h3 { color: #000000; font-family: 'Georgia', serif; font-size: 16px; margin: 30px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-decoration: underline; }
+        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 11px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
+        .scroll-area h3 { color: #000000; font-family: 'Georgia', serif; font-size: 13px; margin: 30px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-decoration: underline; }
 
         /* Formulário em 11px */
         .input-group { margin-bottom: 18px; text-align: left; }
@@ -176,6 +185,8 @@
 
         <div id="text-container" class="content-box">
             <div class="scroll-area">
+                <img src="logo-transparente.png" alt="Título das Regras" class="top-image">
+
                 <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
                 <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
                 <p>Vossa glória há de ser forjada sob as penumbras de nossa estalagem. E sabei vós: caso a ruína vos acometa no prélio, as antigas leis vos facultam rogar pela mesma divindade, para que a vossa vindita se cumpra na arena.</p> 
