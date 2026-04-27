@@ -59,10 +59,16 @@
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: url('regras.jpeg'); background-size: cover; background-position: center;
             display: flex; align-items: center; justify-content: center; z-index: 10;
+            opacity: 0; /* INVISÍVEL NO INÍCIO para evitar o flash fantasma */
+            transition: opacity 0.5s ease;
         }
 
+        /* AJUSTE DO BOX DE CONTEÚDO (Mais estreito e para a direita) */
         .content-box {
-            width: 90%; max-width: 450px; padding: 40px; 
+            width: 90%; 
+            max-width: 360px; /* Box mais estreito para caber no papel */
+            padding: 20px; 
+            margin-left: 10%; /* Empurra todo o box para a direita */
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
         }
@@ -78,7 +84,7 @@
            ========================================= */
         .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        .scroll-area { max-height: 55vh; overflow-y: auto; margin-top: 40px; margin-bottom: 25px; padding-right: 15px; }
+        .scroll-area { max-height: 55vh; overflow-y: auto; margin-top: 30px; margin-bottom: 25px; padding-right: 15px; }
         .scroll-area::-webkit-scrollbar { width: 8px; }
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
         .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
@@ -102,16 +108,16 @@
         #success-message { 
             display: none; 
             position: absolute; 
-            top: 12%; /* Altura perfeita para ficar sobre as pedras da lareira */
-            left: 50%; /* Joga para a metade da tela */
-            transform: translateX(-50%); /* Puxa o texto de volta para o centro exato */
+            top: 12%; 
+            left: 50%; 
+            transform: translateX(-50%); 
             width: 100%;
             text-align: center; 
             z-index: 120; 
         }
         #success-message h3 { 
             color: #ffffff; 
-            font-size: 26px; /* Aumentei um tiquinho para dar mais destaque */
+            font-size: 26px; 
             margin-bottom: 15px; 
             letter-spacing: 2px; 
             text-shadow: 2px 2px 15px rgba(0,0,0,0.9); 
@@ -236,7 +242,7 @@
             introVideo.style.display = 'none'; 
         });
 
-        // PASSO 3: Clica em envelope.jpeg -> Toca rasgo.mp3 E roda romper-selo.mp4
+        // PASSO 3: Clica em envelope.jpeg -> Toca rasgo E roda romper-selo.mp4
         envelopeScreen.addEventListener('click', function() {
             const sfxTear = document.getElementById('sfx-tear');
             sfxTear.currentTime = 0;
@@ -251,10 +257,16 @@
             setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
         });
 
-        // PASSO 4: romper-selo.mp4 Acaba -> Mostra as Regras em HTML (fundo regras.jpeg)
+        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
         romperVideo.addEventListener('ended', function() {
-            romperVideo.style.display = 'none';
-            regrasHtml.classList.add('show-page');
+            tavernScreen.style.opacity = '1'; // AQUI ACONTECE A MÁGICA: O fundo surge sem piscar!
+            
+            romperVideo.style.transition = 'opacity 0.5s ease';
+            romperVideo.style.opacity = '0';
+            setTimeout(() => {
+                romperVideo.style.display = 'none';
+                regrasHtml.classList.add('show-page');
+            }, 500);
         });
 
         // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
@@ -266,7 +278,7 @@
             }, 500);
         });
 
-        // PASSO 6: Assina o Formulário -> Toca assinatura.mp3 E roda assinatura-final.mp4
+        // PASSO 6: Assina o Formulário -> Toca som da caneta E roda assinatura-final.mp4
         var submitted = false;
         document.getElementById('registration-form').addEventListener('submit', function() {
             submitted = true;
@@ -319,6 +331,7 @@
             document.getElementById('menu-form-container').style.display = 'none';
             
             // Já inscrito? Vai direto para a tela final com a imagem final.jpeg
+            tavernScreen.style.opacity = '1';
             tavernScreen.style.backgroundImage = "url('final.jpeg')";
             
             // Aciona a mensagem no topo
