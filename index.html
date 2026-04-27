@@ -59,16 +59,17 @@
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: url('regras.jpeg'); background-size: cover; background-position: center;
             display: flex; align-items: center; justify-content: center; z-index: 10;
-            opacity: 0; /* INVISÍVEL NO INÍCIO para evitar o flash fantasma */
+            opacity: 0; 
             transition: opacity 0.5s ease;
         }
 
-        /* AJUSTE DO BOX DE CONTEÚDO (Mais estreito e para a direita) */
+        /* AJUSTE FINO DO BOX DE CONTEÚDO (Posição e Largura) */
         .content-box {
             width: 90%; 
-            max-width: 360px; /* Box mais estreito para caber no papel */
-            padding: 20px; 
-            margin-left: 10%; /* Empurra todo o box para a direita */
+            max-width: 390px; /* Esticado mais para a esquerda */
+            padding: 15px 20px; /* Topo e base reduzidos para sobrar espaço */
+            margin-left: 4%; /* Centraliza melhor no pergaminho */
+            margin-top: 8vh; /* Desce a caixa inteira na tela */
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
         }
@@ -80,11 +81,17 @@
         #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         /* =========================================
-           5. TIPOGRAFIA E BOTÕES (12PX)
+           5. TIPOGRAFIA E BOTÕES (AJUSTADOS)
            ========================================= */
         .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        .scroll-area { max-height: 55vh; overflow-y: auto; margin-top: 30px; margin-bottom: 25px; padding-right: 15px; }
+        /* Espaço de rolagem otimizado */
+        .scroll-area { 
+            max-height: 58vh; /* Ganhou altura com o botão menor */
+            margin-top: 10px; /* Reduzido o vazio no topo do texto */
+            margin-bottom: 15px; 
+            padding-right: 15px; 
+        }
         .scroll-area::-webkit-scrollbar { width: 8px; }
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
         .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
@@ -98,8 +105,14 @@
         .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 12px; font-weight: bold; outline: none; transition: border-color 0.3s; }
         .input-group input:focus { border-bottom: 2px solid #8c2425; }
 
-        /* Botões Gerais */
-        .submit-btn { width: 100%; padding: 15px; background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; font-size: 12px; cursor: pointer; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); }
+        /* Botões Gerais (Reduzidos para salvar espaço) */
+        .submit-btn { 
+            width: 100%; 
+            padding: 12px; /* Reduzido o botão para dar mais espaço ao texto */
+            background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; 
+            font-size: 11px; /* Fonte ligeiramente menor no botão */
+            cursor: pointer; transition: all 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
+        }
         .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
         
         /* =========================================
@@ -259,7 +272,7 @@
 
         // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
         romperVideo.addEventListener('ended', function() {
-            tavernScreen.style.opacity = '1'; // AQUI ACONTECE A MÁGICA: O fundo surge sem piscar!
+            tavernScreen.style.opacity = '1'; 
             
             romperVideo.style.transition = 'opacity 0.5s ease';
             romperVideo.style.opacity = '0';
@@ -302,7 +315,7 @@
             // Troca o fundo dinamicamente para final.jpeg
             tavernScreen.style.backgroundImage = "url('final.jpeg')";
             
-            // Ativa a mensagem de sucesso que agora flutua no topo
+            // Ativa a mensagem de sucesso
             document.getElementById('success-message').style.display = 'block';
 
             setTimeout(() => { assinaturaVideo.style.display = 'none'; }, 1000);
@@ -330,11 +343,9 @@
             document.getElementById('text-container').style.display = 'none';
             document.getElementById('menu-form-container').style.display = 'none';
             
-            // Já inscrito? Vai direto para a tela final com a imagem final.jpeg
             tavernScreen.style.opacity = '1';
             tavernScreen.style.backgroundImage = "url('final.jpeg')";
             
-            // Aciona a mensagem no topo
             document.getElementById('success-message').style.display = 'block';
         }
         */
