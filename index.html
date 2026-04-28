@@ -63,34 +63,36 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO (Para não sofrer transição) */
+        /* CONTAINER ESTÁTICO DA LOGO (Fixa no topo do pergaminho) */
         .static-logo-wrapper {
-            width: 90%; 
+            width: 100%; 
             max-width: 420px; 
+            height: 80px; /* Altura do retângulo superior */
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); 
+            margin-top: 5vh; /* Ajuste para centralizar verticalmente no topo do papel */
             position: absolute; 
             z-index: 20; /* Fica acima de tudo no pergaminho */
             pointer-events: none;
+            display: flex;
+            justify-content: center; /* Centraliza a imagem horizontalmente */
+            align-items: center;    /* Centraliza a imagem verticalmente */
         }
 
-        /* IMAGEM ABSOLUTA (Descendo mais 50px) */
+        /* IMAGEM ABSOLUTA (Sem margens negativas loucas) */
         .top-image-absolute {
-            position: absolute;
-            top: -110px; 
-            left: -50px; 
             width: 80px; 
             height: 80px;
             object-fit: contain;
         }
 
-        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
+        /* CAIXA DE CONTEÚDO (Texto e Formulário, agora mais abaixo) */
         .content-box {
             width: 90%; 
             max-width: 420px; 
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
+            /* Empurrado mais para baixo para dar espaço à imagem estática no topo */
             margin-top: calc(15vh + 180px); 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
@@ -304,7 +306,7 @@
             }, 500);
         });
 
-        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário (A logo continua intocável)
+        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário (A logo continua intocável no topo)
         document.getElementById('btn-next').addEventListener('click', function() {
             regrasHtml.classList.remove('show-page');
             regrasHtml.classList.add('hide-page');
