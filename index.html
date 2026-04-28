@@ -63,36 +63,34 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO (Fixa no topo do pergaminho) */
+        /* CONTAINER ESTÁTICO DA LOGO (Mesma base de posição da caixa de texto) */
         .static-logo-wrapper {
-            width: 100%; 
+            width: 90%; 
             max-width: 420px; 
-            height: 80px; /* Altura do retângulo superior */
             margin-left: 4%; 
-            margin-top: 5vh; /* Ajuste para centralizar verticalmente no topo do papel */
+            margin-top: calc(15vh + 180px); 
             position: absolute; 
-            z-index: 20; /* Fica acima de tudo no pergaminho */
+            z-index: 20; 
             pointer-events: none;
-            display: flex;
-            justify-content: center; /* Centraliza a imagem horizontalmente */
-            align-items: center;    /* Centraliza a imagem verticalmente */
         }
 
-        /* IMAGEM ABSOLUTA (Sem margens negativas loucas) */
+        /* IMAGEM ABSOLUTA (Com os valores exatos que você pediu para aterrissar no retângulo verde) */
         .top-image-absolute {
+            position: absolute;
+            top: -110px; 
+            left: -50px; 
             width: 80px; 
             height: 80px;
             object-fit: contain;
         }
 
-        /* CAIXA DE CONTEÚDO (Texto e Formulário, agora mais abaixo) */
+        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
         .content-box {
             width: 90%; 
             max-width: 420px; 
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            /* Empurrado mais para baixo para dar espaço à imagem estática no topo */
             margin-top: calc(15vh + 180px); 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
@@ -294,7 +292,7 @@
             setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
         });
 
-        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg), Logo Estática E o texto HTML
+        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
         romperVideo.addEventListener('ended', function() {
             tavernScreen.style.opacity = '1'; 
             
@@ -306,7 +304,7 @@
             }, 500);
         });
 
-        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário (A logo continua intocável no topo)
+        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
         document.getElementById('btn-next').addEventListener('click', function() {
             regrasHtml.classList.remove('show-page');
             regrasHtml.classList.add('hide-page');
@@ -327,7 +325,7 @@
             sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
 
             formContainer.classList.remove('show-page');
-            // Escondemos a logo estática para que ela não fique por cima do vídeo final!
+            // Escondemos a logo estática SOMENTE na hora de rodar o vídeo final
             document.getElementById('static-logo').style.display = 'none'; 
 
             assinaturaVideo.style.display = 'block';
