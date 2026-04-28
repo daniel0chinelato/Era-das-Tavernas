@@ -63,35 +63,36 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO (Solto do texto, fixado no topo) */
+        /* O SEGREDO DO ENCAIXE: Esta caixa invisível tem exatamente as mesmas coordenadas do texto */
         .static-logo-wrapper {
             width: 90%; 
             max-width: 420px; 
+            padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            margin-top: 18vh; /* Altura âncora fixa no topo do pergaminho */
+            margin-top: calc(15vh + 180px); 
             position: absolute; 
             z-index: 20; 
             pointer-events: none;
         }
 
-        /* IMAGEM ABSOLUTA (Sem precisar de margens negativas gigantes) */
+        /* IMAGEM ABSOLUTA COM OS VALORES QUE VOCÊ ACERTOU */
         .top-image-absolute {
             position: absolute;
-            top: 0; 
-            left: -30px; /* Ajuste para encostar na margem esquerda do papel */
+            top: -110px; 
+            left: -50px; 
             width: 80px; 
             height: 80px;
             object-fit: contain;
         }
 
-        /* CAIXA DE CONTEÚDO (Texto e Formulário - Mantida a posição inferior) */
+        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
         .content-box {
             width: 90%; 
             max-width: 420px; 
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); /* Texto começa bem mais para baixo */
+            margin-top: calc(15vh + 180px); 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
             display: flex;
@@ -325,8 +326,9 @@
             sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
 
             formContainer.classList.remove('show-page');
-            // Escondemos a logo estática para não vazar sobre o vídeo final
-            document.getElementById('static-logo').style.display = 'none'; 
+            
+            // Oculta a logo apenas no momento do vídeo de assinatura final
+            document.getElementById('static-logo').style.display = 'none';
 
             assinaturaVideo.style.display = 'block';
             assinaturaVideo.play().catch(e => console.log("Erro no vídeo final:", e));
@@ -355,25 +357,6 @@
                 submitted = false; 
             }
         });
-
-        // =========================================================================
-        // VERIFICA SE JÁ SE INSCREVEU (Bloqueio - Comentado para testes)
-        // =========================================================================
-        /*
-        if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('intro-video').style.display = 'none';
-            document.getElementById('envelope-screen').style.display = 'none';
-            document.getElementById('romper-video').style.display = 'none';
-            document.getElementById('text-container').style.display = 'none';
-            document.getElementById('menu-form-container').style.display = 'none';
-            
-            tavernScreen.style.opacity = '1';
-            tavernScreen.style.backgroundImage = "url('final.jpeg')";
-            
-            document.getElementById('success-message').style.display = 'block';
-        }
-        */
     </script>
 </body>
 </html>
