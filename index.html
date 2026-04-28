@@ -12,7 +12,7 @@
         body, html { height: 100%; overflow: hidden; background-color: #050505; }
 
         /* =========================================
-           2. TELAS CHEIAS (VÍDEOS E IMAGENS)
+           2. CLASSES PARA TELAS CHEIAS (VÍDEOS E IMAGENS)
            ========================================= */
         .full-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -58,17 +58,22 @@
 
         .content-box {
             width: 90%; max-width: 420px; height: 50vh; padding: 0 20px 0 45px; 
-            margin-left: 4%; margin-top: calc(15vh + 180px); 
+            margin-left: 4%; 
+            margin-top: calc(15vh + 80px); 
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
             display: flex; flex-direction: column;
         }
 
+        /* DIV PARA A LOGO TRANSPARENTE - AJUSTE: top alterado de -10px para -60px */
         .top-image-container {
-            position: absolute; top: -110px; left: -50px; z-index: 20; pointer-events: none;
+            position: absolute; 
+            top: -60px; /* Valor ajustado: -10px - 50px = -60px */
+            left: -50px; 
+            z-index: 20; 
+            pointer-events: none;
         }
 
-        /* IMAGEM COM OPACIDADE DE 80% */
         .top-image { 
             width: 80px; 
             height: auto; 
@@ -101,7 +106,7 @@
         .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-size: 11px; font-weight: bold; outline: none; }
 
         /* =========================================
-           6. BOTÃO (ESTILO GHOST + BOLD + STROKE PRETO)
+           6. BOTÃO (GHOST + BOLD + STROKE PRETO 1.8px)
            ========================================= */
         .submit-btn { 
             flex-shrink: 0; 
@@ -146,9 +151,8 @@
 
     <div id="tavern-screen">
         <div id="success-message">
-           <h3>O PACTO FOI SELADO!</h3>
-            <p>Vosso nome foi gravado a sangue no códice e o vosso assento na justa está assegurado.</p>
-            <p>Afiai vossas lâminas nas penumbras e aguardai o soar dos tambores de guerra.</p>
+            <h3>O PACTO FOI SELADO!</h3>
+            <p>Vosso nome foi gravado a sangue no códice.</p>
         </div>
 
         <div id="text-container" class="content-box">
