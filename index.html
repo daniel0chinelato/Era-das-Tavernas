@@ -12,7 +12,7 @@
         body, html { height: 100%; overflow: hidden; background-color: #050505; }
 
         /* =========================================
-           2. CLASSES PARA TELAS CHEIAS (VÍDEOS E IMAGENS)
+           2. TELAS CHEIAS (VÍDEOS E IMAGENS)
            ========================================= */
         .full-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -26,7 +26,6 @@
             object-fit: cover; background-color: #000; display: none;
         }
 
-        /* Dicas piscando para o jogador saber que deve clicar */
         .click-hint::after {
             color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
             margin-top: 40vh; font-family: sans-serif; text-align: center;
@@ -42,67 +41,39 @@
            ========================================= */
         #intro-screen { background-image: url('inicio.jpeg'); z-index: 70; }
         #intro-screen::after { content: "CLIQUE PARA INICIAR"; }
-        
         #intro-video { z-index: 65; }
-
         #envelope-screen { background-image: url('envelope.jpeg'); z-index: 60; display: none; }
-        #envelope-screen::after { content: "CLIQUE NO ENVELOPE"; margin-top: 60vh;}
-
         #romper-video { z-index: 55; }
-
         #assinatura-video { z-index: 100; } 
 
         /* =========================================
-           4. TAVERNA E NAVEGAÇÃO HTML (FUNDO FIXO)
+           4. TAVERNA E NAVEGAÇÃO
            ========================================= */
         #tavern-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: url('regras.jpeg'); background-size: cover; background-position: center;
             display: flex; align-items: center; justify-content: center; z-index: 10;
-            opacity: 0; 
-            transition: opacity 0.5s ease;
+            opacity: 0; transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO - ALINHADO À ESQUERDA */
-        .static-logo-wrapper {
-            width: 90%; 
-            max-width: 420px; 
-            padding: 0 20px 0 45px; 
-            margin-left: 4%; 
-            margin-top: calc(15vh + 60px); 
-            position: absolute; 
-            z-index: 20; 
-            pointer-events: none;
-            display: flex;
-            justify-content: flex-start; 
-        }
-
-        /* IMAGEM DA LOGO */
-        .top-image-absolute {
-            width: 80px; 
-            height: 80px;
-            object-fit: contain;
-        }
-
-        /* CAIXA DE CONTEÚDO (Texto e Formulário) REVISADA */
         .content-box {
-            width: 90%; 
-            max-width: 420px; 
-            height: 50vh; 
-            padding: 0 20px 0 45px; 
-            margin-left: 4%; 
-            margin-top: calc(15vh + 180px); 
-            background: transparent !important; 
-            box-shadow: none !important; 
-            border: none !important;
-            position: absolute; 
-            
-            /* CORREÇÃO DO BOX: Animamos apenas opacidade e transform para evitar "bugs de espremer" 
-               ao abrir teclado no mobile ou redimensionar a tela, garantindo a estabilidade da caixa */
-            transition: opacity 0.8s ease, transform 0.8s ease; 
-            
-            display: flex;
-            flex-direction: column;
+            width: 90%; max-width: 420px; height: 50vh; padding: 0 20px 0 45px; 
+            margin-left: 4%; margin-top: calc(15vh + 180px); 
+            background: transparent !important; box-shadow: none !important; border: none !important;
+            position: absolute; transition: all 0.8s ease;
+            display: flex; flex-direction: column;
+        }
+
+        .top-image-container {
+            position: absolute; top: -110px; left: -50px; z-index: 20; pointer-events: none;
+        }
+
+        /* IMAGEM COM OPACIDADE DE 80% */
+        .top-image { 
+            width: 80px; 
+            height: auto; 
+            object-fit: contain; 
+            opacity: 0.8; 
         }
 
         #text-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
@@ -112,101 +83,78 @@
         #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         /* =========================================
-           5. TIPOGRAFIA E BOTÕES
+           5. TIPOGRAFIA E ELEMENTOS
            ========================================= */
-        .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
-
         .scroll-area { 
-            flex: 1; 
-            overflow-y: auto; 
-            margin-top: 10px; 
+            flex: 1; overflow-y: auto; margin-top: 10px; 
             margin-bottom: 15px; 
             padding-right: 15px; 
         }
         .scroll-area::-webkit-scrollbar { width: 8px; }
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
-        .scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 
-        /* Textos em 14px */
-        .scroll-area p { color: #000000; font-family: 'Georgia', serif; font-size: 14px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
-        .scroll-area h3, .scroll-area h4 { color: #000000; font-family: 'Georgia', serif; font-size: 16px; margin: 10px 0 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        .scroll-area p { color: #000000; font-size: 14px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
+        .scroll-area h4 { color: #000000; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
 
-        /* Formulário em 11px */
         .input-group { margin-bottom: 18px; text-align: left; }
-        .input-group label { display: block; color: #000000; font-family: 'Georgia', serif; margin-bottom: 5px; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
-        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-family: 'Georgia', serif; font-size: 11px; font-weight: bold; outline: none; transition: border-color 0.3s; }
-        .input-group input:focus { border-bottom: 2px solid #8c2425; }
+        .input-group label { display: block; color: #000000; margin-bottom: 5px; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
+        .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-size: 11px; font-weight: bold; outline: none; }
 
-        /* Botões Gerais */
+        /* =========================================
+           6. BOTÃO (ESTILO GHOST + BOLD + STROKE PRETO)
+           ========================================= */
         .submit-btn { 
             flex-shrink: 0; 
             width: 100%; 
-            padding: 10px; 
-            background-color: rgba(10, 5, 2, 0.9); color: #d4af37; font-family: 'Georgia', serif; border: 2px solid #8c2425; 
-            font-size: 11px; 
-            cursor: pointer; transition: all 0.3s; margin-top: auto; text-transform: uppercase; letter-spacing: 3px; box-shadow: inset 0 0 15px rgba(140, 36, 37, 0.6), 0 5px 15px rgba(0,0,0,0.8); 
+            padding: 12px; 
+            background-color: transparent; 
+            color: #000000; 
+            border: 1.8px solid #000000; 
+            font-size: 10px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.4s ease; 
+            margin-top: auto; 
+            text-transform: uppercase; 
+            letter-spacing: 5px; 
+            outline: none;
         }
-        .submit-btn:hover { background-color: #8c2425; color: #fff; box-shadow: 0 0 25px rgba(140, 36, 37, 0.9); }
+
+        .submit-btn:hover { 
+            background-color: rgba(0, 0, 0, 0.05); 
+            letter-spacing: 6px;
+        }
         
-        /* =========================================
-           MENSAGEM DE SUCESSO
-           ========================================= */
         #success-message { 
-            display: none; 
-            position: absolute; 
-            top: 12%; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 100%;
-            text-align: center; 
-            z-index: 120; 
+            display: none; position: absolute; top: 12%; left: 50%; 
+            transform: translateX(-50%); width: 100%; text-align: center; z-index: 120; 
         }
-        #success-message h3 { 
-            color: #ffffff; 
-            font-size: 26px; 
-            margin-bottom: 15px; 
-            letter-spacing: 2px; 
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.9); 
-        }
-        #success-message p { 
-            color: #ffffff; 
-            font-size: 16px; 
-            font-weight: bold; 
-            line-height: 1.5; 
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.9); 
-        }
+        #success-message h3 { color: #ffffff; font-size: 26px; margin-bottom: 15px; letter-spacing: 2px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        #success-message p { color: #ffffff; font-size: 16px; font-weight: bold; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
     </style>
 </head>
 <body>
 
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
-    <audio id="sfx-tear" src="rasgo.mp3" preload="auto"></audio>
     <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
 
     <div id="intro-screen" class="full-screen click-hint"></div>
-    
     <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
-
     <div id="envelope-screen" class="full-screen click-hint"></div>
-
     <video id="romper-video" class="full-video" src="romper-selo.mp4" playsinline></video>
-
     <video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline></video>
 
-
     <div id="tavern-screen">
-        
         <div id="success-message">
-            <h3>O PACTO FOI SELADO!</h3>
+           <h3>O PACTO FOI SELADO!</h3>
             <p>Vosso nome foi gravado a sangue no códice e o vosso assento na justa está assegurado.</p>
             <p>Afiai vossas lâminas nas penumbras e aguardai o soar dos tambores de guerra.</p>
         </div>
 
-        <div class="static-logo-wrapper" id="static-logo">
-            <img src="logo-transparente.png" alt="Selo" class="top-image-absolute">
-        </div>
-
         <div id="text-container" class="content-box">
+            <div class="top-image-container">
+                <img src="logo-transparente.png" alt="Selo" class="top-image">
+            </div>
             <div class="scroll-area">
                 <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
                 <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
@@ -217,151 +165,76 @@
         </div>
 
         <div id="menu-form-container" class="content-box">
-            <h2 class="form-title" id="titulo-form">Inscrição</h2>
-            
-            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" 
-                  method="POST" 
-                  target="hidden_iframe" 
-                  id="registration-form">
-                
-                <div class="input-group">
-                    <label for="teste1">Teste 1</label>
-                    <input type="text" name="entry.659203104" id="teste1" autocomplete="off" required>
-                </div>
-                <div class="input-group">
-                    <label for="teste2">Teste 2</label>
-                    <input type="text" name="entry.1748481037" id="teste2" autocomplete="off" required>
-                </div>
-                <div class="input-group">
-                    <label for="teste3">Teste 3</label>
-                    <input type="text" name="entry.1264482586" id="teste3" autocomplete="off" required>
-                </div>
-                <div class="input-group">
-                    <label for="teste4">Teste 4</label>
-                    <input type="text" name="entry.1329515624" id="teste4" autocomplete="off" required>
-                </div>
-                
+            <div class="top-image-container">
+                <img src="logo-transparente.png" alt="Selo" class="top-image">
+            </div>
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" method="POST" target="hidden_iframe" id="registration-form">
+                <div class="input-group"><label>Inscrição I</label><input type="text" name="entry.659203104" required></div>
+                <div class="input-group"><label>Inscrição II</label><input type="text" name="entry.1748481037" required></div>
+                <div class="input-group"><label>Inscrição III</label><input type="text" name="entry.1264482586" required></div>
+                <div class="input-group"><label>Inscrição IV</label><input type="text" name="entry.1329515624" required></div>
                 <button type="submit" class="submit-btn" id="btn-submit">Assinar Contrato</button>
             </form>
-            
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
         </div>
     </div>
 
     <script>
-        // =========================================================================
-        // O ROTEIRO DE TRANSIÇÕES (IMAGEM > VÍDEO > HTML)
-        // =========================================================================
-        
         const introScreen = document.getElementById('intro-screen');
         const introVideo = document.getElementById('intro-video');
-        
         const envelopeScreen = document.getElementById('envelope-screen');
         const romperVideo = document.getElementById('romper-video');
-        
         const regrasHtml = document.getElementById('text-container');
         const formContainer = document.getElementById('menu-form-container');
         const tavernScreen = document.getElementById('tavern-screen'); 
-        
         const assinaturaVideo = document.getElementById('assinatura-video');
         const sfxTavern = document.getElementById('sfx-tavern');
 
-        // PASSO 1: Clica no Início -> Roda animation.mp4
-        introScreen.addEventListener('click', function() {
+        introScreen.addEventListener('click', () => {
             introVideo.style.display = 'block';
-            introVideo.play().catch(e => console.log("Erro no vídeo inicial:", e));
-            
+            introVideo.play();
             introScreen.style.opacity = '0';
             setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
         });
 
-        // PASSO 2: animation.mp4 Acaba -> Mostra envelope.jpeg e Toca som da Taverna
-        introVideo.addEventListener('ended', function() {
+        introVideo.addEventListener('ended', () => {
             sfxTavern.volume = 0.3;
-            sfxTavern.play().catch(e => console.log("Áudio ambiente bloqueado:", e));
-
+            sfxTavern.play();
             envelopeScreen.style.display = 'flex'; 
             introVideo.style.display = 'none'; 
         });
 
-        // PASSO 3: Clica em envelope.jpeg -> Toca rasgo E roda romper-selo.mp4
-        envelopeScreen.addEventListener('click', function() {
-            const sfxTear = document.getElementById('sfx-tear');
-            sfxTear.currentTime = 0;
-            sfxTear.volume = 0.4; 
-            sfxTear.playbackRate = 1.8; 
-            sfxTear.play().catch(e => console.log("Áudio bloqueado:", e));
-
+        envelopeScreen.addEventListener('click', () => {
             romperVideo.style.display = 'block';
-            romperVideo.play().catch(e => console.log("Erro no vídeo do selo:", e));
-            
+            romperVideo.play();
             envelopeScreen.style.opacity = '0';
             setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
         });
 
-        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
-        romperVideo.addEventListener('ended', function() {
+        romperVideo.addEventListener('ended', () => {
             tavernScreen.style.opacity = '1'; 
-            
-            romperVideo.style.transition = 'opacity 0.5s ease';
-            romperVideo.style.opacity = '0';
-            setTimeout(() => {
-                romperVideo.style.display = 'none';
-                regrasHtml.classList.add('show-page');
-            }, 500);
+            romperVideo.style.display = 'none';
+            regrasHtml.classList.add('show-page');
         });
 
-        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
-        document.getElementById('btn-next').addEventListener('click', function() {
+        document.getElementById('btn-next').addEventListener('click', () => {
             regrasHtml.classList.remove('show-page');
-            regrasHtml.classList.add('hide-page');
-            setTimeout(() => {
-                formContainer.classList.add('show-page');
-            }, 500);
+            setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
         });
 
-        // PASSO 6: Assina o Formulário -> Toca som da caneta E roda assinatura-final.mp4
-        var submitted = false;
-        document.getElementById('registration-form').addEventListener('submit', function() {
+        let submitted = false;
+        document.getElementById('registration-form').addEventListener('submit', () => {
             submitted = true;
-            document.getElementById('btn-submit').innerText = "Assinando na pedra...";
-            
-            const sfxSigning = document.getElementById('sfx-signing');
-            sfxSigning.currentTime = 0;
-            sfxSigning.volume = 1.0;
-            sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
-
+            document.getElementById('sfx-signing').play();
             formContainer.classList.remove('show-page');
-            
-            // Oculta a logo apenas no momento do vídeo de assinatura final
-            document.getElementById('static-logo').style.display = 'none';
-
             assinaturaVideo.style.display = 'block';
-            assinaturaVideo.play().catch(e => console.log("Erro no vídeo final:", e));
+            assinaturaVideo.play();
         });
 
-        // PASSO 7: assinatura-final.mp4 Acaba -> Mostra mensagem de sucesso e final.jpeg
-        assinaturaVideo.addEventListener('ended', function() {
-            assinaturaVideo.style.transition = 'opacity 1s ease';
-            assinaturaVideo.style.opacity = '0';
-            
-            // Troca o fundo dinamicamente para final.jpeg
+        assinaturaVideo.addEventListener('ended', () => {
             tavernScreen.style.backgroundImage = "url('final.jpeg')";
-            
-            // Ativa a mensagem de sucesso
             document.getElementById('success-message').style.display = 'block';
-
-            setTimeout(() => { assinaturaVideo.style.display = 'none'; }, 1000);
-        });
-
-        document.getElementById('hidden_iframe').addEventListener('load', function() {
-            if (submitted) {
-                // =========================================================================
-                // GRAVA A INSCRIÇÃO NO NAVEGADOR (Comentado para testes)
-                // localStorage.setItem('inscrito_era_tavernas', 'true');
-                // =========================================================================
-                submitted = false; 
-            }
+            assinaturaVideo.style.display = 'none';
         });
     </script>
 </body>
