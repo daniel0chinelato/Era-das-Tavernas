@@ -63,17 +63,18 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO (Fixado no topo, acima do texto) */
+        /* CONTAINER ESTÁTICO DA LOGO - ALINHADO À ESQUERDA */
         .static-logo-wrapper {
             width: 90%; 
             max-width: 420px; 
-            padding: 0 20px 0 45px; 
+            padding: 0 20px 0 45px; /* O 45px alinha com o recuo do texto */
             margin-left: 4%; 
-            margin-top: calc(15vh + 30px); /* Posição exata no topo do pergaminho (150px acima do texto) */
+            margin-top: calc(15vh + 60px); 
             position: absolute; 
             z-index: 20; 
             pointer-events: none;
             display: flex;
+            justify-content: flex-start; /* A mágica que joga pra esquerda */
         }
 
         /* IMAGEM DA LOGO */
@@ -81,7 +82,6 @@
             width: 80px; 
             height: 80px;
             object-fit: contain;
-            margin-left: -35px; /* Puxa um pouquinho para a esquerda para alinhar com o quadrado verde */
         }
 
         /* CAIXA DE CONTEÚDO (Texto e Formulário) */
@@ -91,7 +91,7 @@
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); /* Texto começa 150px abaixo da logo */
+            margin-top: calc(15vh + 180px); /* O texto começa bem abaixo da logo */
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
             display: flex;
@@ -326,7 +326,7 @@
 
             formContainer.classList.remove('show-page');
             
-            // Oculta a logo para não atrapalhar o vídeo final
+            // Oculta a logo apenas no momento do vídeo de assinatura final
             document.getElementById('static-logo').style.display = 'none';
 
             assinaturaVideo.style.display = 'block';
