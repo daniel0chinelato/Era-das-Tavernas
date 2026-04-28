@@ -63,7 +63,28 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CAIXA DE CONTEÚDO */
+        /* CONTAINER ESTÁTICO DA LOGO (Para não sofrer transição) */
+        .static-logo-wrapper {
+            width: 90%; 
+            max-width: 420px; 
+            margin-left: 4%; 
+            margin-top: calc(15vh + 180px); 
+            position: absolute; 
+            z-index: 20; /* Fica acima de tudo no pergaminho */
+            pointer-events: none;
+        }
+
+        /* IMAGEM ABSOLUTA (Descendo mais 50px) */
+        .top-image-absolute {
+            position: absolute;
+            top: -110px; 
+            left: -50px; 
+            width: 80px; 
+            height: 80px;
+            object-fit: contain;
+        }
+
+        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
         .content-box {
             width: 90%; 
             max-width: 420px; 
@@ -87,18 +108,6 @@
            5. TIPOGRAFIA E BOTÕES
            ========================================= */
         .form-title { color: #000000; font-family: 'Georgia', serif; text-align: center; font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; }
-
-        /* IMAGEM ABSOLUTA (Descendo mais 50px) */
-        .top-image-absolute {
-            position: absolute;
-            top: -110px; /* Desceu mais 50px (antes era -160px) */
-            left: -50px; 
-            width: 80px; 
-            height: 80px;
-            object-fit: contain;
-            z-index: 15;
-            pointer-events: none; 
-        }
 
         .scroll-area { 
             flex: 1; 
@@ -186,10 +195,11 @@
             <p>Afiai vossas lâminas nas penumbras e aguardai o soar dos tambores de guerra.</p>
         </div>
 
-        <div id="text-container" class="content-box">
-            
+        <div class="static-logo-wrapper" id="static-logo">
             <img src="logo-transparente.png" alt="Selo" class="top-image-absolute">
+        </div>
 
+        <div id="text-container" class="content-box">
             <div class="scroll-area">
                 <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
                 <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
@@ -282,7 +292,7 @@
             setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
         });
 
-        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg) E o texto HTML
+        // PASSO 4: romper-selo.mp4 Acaba -> Revela o Fundo (regras.jpeg), Logo Estática E o texto HTML
         romperVideo.addEventListener('ended', function() {
             tavernScreen.style.opacity = '1'; 
             
@@ -294,7 +304,7 @@
             }, 500);
         });
 
-        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
+        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário (A logo continua intocável)
         document.getElementById('btn-next').addEventListener('click', function() {
             regrasHtml.classList.remove('show-page');
             regrasHtml.classList.add('hide-page');
@@ -315,6 +325,9 @@
             sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
 
             formContainer.classList.remove('show-page');
+            // Escondemos a logo estática para que ela não fique por cima do vídeo final!
+            document.getElementById('static-logo').style.display = 'none'; 
+
             assinaturaVideo.style.display = 'block';
             assinaturaVideo.play().catch(e => console.log("Erro no vídeo final:", e));
         });
