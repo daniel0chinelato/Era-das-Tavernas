@@ -63,7 +63,7 @@
             transition: opacity 0.5s ease;
         }
 
-        /* O SEGREDO DO ENCAIXE: Esta caixa invisível tem exatamente as mesmas coordenadas do texto */
+        /* CONTAINER ESTÁTICO DA LOGO (Mesma âncora do texto) */
         .static-logo-wrapper {
             width: 90%; 
             max-width: 420px; 
@@ -75,7 +75,7 @@
             pointer-events: none;
         }
 
-        /* IMAGEM ABSOLUTA COM OS VALORES QUE VOCÊ ACERTOU */
+        /* IMAGEM EM POSIÇÃO ABSOLUTA COM OS VALORES DE -110 E -50 */
         .top-image-absolute {
             position: absolute;
             top: -110px; 
@@ -305,7 +305,7 @@
             }, 500);
         });
 
-        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário
+        // PASSO 5: Clica em "Preencher" -> Mostra o Formulário (A logo continua na tela!)
         document.getElementById('btn-next').addEventListener('click', function() {
             regrasHtml.classList.remove('show-page');
             regrasHtml.classList.add('hide-page');
@@ -327,7 +327,7 @@
 
             formContainer.classList.remove('show-page');
             
-            // Oculta a logo apenas no momento do vídeo de assinatura final
+            // Oculta a logo APENAS no momento do vídeo de assinatura final para não atrapalhar
             document.getElementById('static-logo').style.display = 'none';
 
             assinaturaVideo.style.display = 'block';
