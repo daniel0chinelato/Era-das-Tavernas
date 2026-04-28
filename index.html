@@ -67,14 +67,14 @@
         .static-logo-wrapper {
             width: 90%; 
             max-width: 420px; 
-            padding: 0 20px 0 45px; /* O 45px alinha com o recuo do texto */
+            padding: 0 20px 0 45px; 
             margin-left: 4%; 
             margin-top: calc(15vh + 60px); 
             position: absolute; 
             z-index: 20; 
             pointer-events: none;
             display: flex;
-            justify-content: flex-start; /* A mágica que joga pra esquerda */
+            justify-content: flex-start; 
         }
 
         /* IMAGEM DA LOGO */
@@ -84,16 +84,23 @@
             object-fit: contain;
         }
 
-        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
+        /* CAIXA DE CONTEÚDO (Texto e Formulário) REVISADA */
         .content-box {
             width: 90%; 
             max-width: 420px; 
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); /* O texto começa bem abaixo da logo */
-            background: transparent !important; box-shadow: none !important; border: none !important;
-            position: absolute; transition: all 0.8s ease;
+            margin-top: calc(15vh + 180px); 
+            background: transparent !important; 
+            box-shadow: none !important; 
+            border: none !important;
+            position: absolute; 
+            
+            /* CORREÇÃO DO BOX: Animamos apenas opacidade e transform para evitar "bugs de espremer" 
+               ao abrir teclado no mobile ou redimensionar a tela, garantindo a estabilidade da caixa */
+            transition: opacity 0.8s ease, transform 0.8s ease; 
+            
             display: flex;
             flex-direction: column;
         }
