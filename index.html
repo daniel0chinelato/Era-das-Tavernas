@@ -63,35 +63,35 @@
             transition: opacity 0.5s ease;
         }
 
-        /* CONTAINER ESTÁTICO DA LOGO (Mesma base de posição da caixa de texto) */
+        /* CONTAINER ESTÁTICO DA LOGO (Solto do texto, fixado no topo) */
         .static-logo-wrapper {
             width: 90%; 
             max-width: 420px; 
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); 
+            margin-top: 18vh; /* Altura âncora fixa no topo do pergaminho */
             position: absolute; 
             z-index: 20; 
             pointer-events: none;
         }
 
-        /* IMAGEM ABSOLUTA (Com os valores exatos que você pediu para aterrissar no retângulo verde) */
+        /* IMAGEM ABSOLUTA (Sem precisar de margens negativas gigantes) */
         .top-image-absolute {
             position: absolute;
-            top: -110px; 
-            left: -50px; 
+            top: 0; 
+            left: -30px; /* Ajuste para encostar na margem esquerda do papel */
             width: 80px; 
             height: 80px;
             object-fit: contain;
         }
 
-        /* CAIXA DE CONTEÚDO (Texto e Formulário) */
+        /* CAIXA DE CONTEÚDO (Texto e Formulário - Mantida a posição inferior) */
         .content-box {
             width: 90%; 
             max-width: 420px; 
             height: 50vh; 
             padding: 0 20px 0 45px; 
             margin-left: 4%; 
-            margin-top: calc(15vh + 180px); 
+            margin-top: calc(15vh + 180px); /* Texto começa bem mais para baixo */
             background: transparent !important; box-shadow: none !important; border: none !important;
             position: absolute; transition: all 0.8s ease;
             display: flex;
@@ -325,7 +325,7 @@
             sfxSigning.play().catch(e => console.log("Áudio bloqueado:", e));
 
             formContainer.classList.remove('show-page');
-            // Escondemos a logo estática SOMENTE na hora de rodar o vídeo final
+            // Escondemos a logo estática para não vazar sobre o vídeo final
             document.getElementById('static-logo').style.display = 'none'; 
 
             assinaturaVideo.style.display = 'block';
