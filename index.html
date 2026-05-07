@@ -27,13 +27,13 @@
             object-fit: cover; background-color: #000; display: none;
         }
 
-        /* CLASSE EXCLUSIVA PARA O VÍDEO INICIAL COM BARRAS PRETAS */
+        /* CORREÇÃO: Nova definição da classe cinematic-video */
         .cinematic-video {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            object-fit: cover; /* Preenche a tela toda... */
-            background-color: #000; display: none;
-            /* ...e corta 12% do topo e 12% da base, simulando faixas de cinema */
-            clip-path: inset(12% 0 12% 0); 
+            background-color: #000; /* Fundo preto garante as faixas */
+            display: none;
+            /* SOLUÇÃO: 'contain' mostra o vídeo INTEIRO sem cortar o topo ou laterais */
+            object-fit: contain; 
         }
 
         .click-hint::after {
