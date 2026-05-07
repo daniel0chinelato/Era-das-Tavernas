@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscrição | Tavernas</title>
+    <title>Inscrição | Era das Tavernas</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         /* =========================================
@@ -25,6 +25,15 @@
         .full-video {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             object-fit: cover; background-color: #000; display: none;
+        }
+
+        /* CLASSE EXCLUSIVA PARA O VÍDEO INICIAL COM BARRAS PRETAS */
+        .cinematic-video {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            object-fit: cover; /* Preenche a tela toda... */
+            background-color: #000; display: none;
+            /* ...e corta 12% do topo e 12% da base, simulando faixas de cinema */
+            clip-path: inset(12% 0 12% 0); 
         }
 
         .click-hint::after {
@@ -149,7 +158,7 @@
         <div class="pre-start-text">INICIAR TRAILER</div>
     </div>
 
-    <video id="initial-video" class="full-video" src="tavernas 2.mp4" playsinline></video>
+    <video id="initial-video" class="cinematic-video" src="tavernas 2.mp4" playsinline></video>
 
     <div id="intro-screen" class="full-screen click-hint"></div>
     <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
@@ -166,7 +175,7 @@
         </div>
 
         <div id="text-container" class="content-box">
-            <div class="top-image-container"><img src="logo-transparente.png" alt="Selo" class="top-image"></div>
+            <div class="top-image-container"><img src="logo_transparente.png" alt="Selo" class="top-image"></div>
             <div class="scroll-area">
                 <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
                 <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
