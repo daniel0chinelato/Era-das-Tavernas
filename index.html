@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscrição | Tavernas</title>
+    <title>Inscrição | Era das Tavernas</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         /* =========================================
@@ -38,9 +38,38 @@
         }
 
         /* =========================================
-           3. CAMADAS (Z-INDEX)
+           3. CAMADAS (Z-INDEX) E TELA INICIAL
            ========================================= */
-        #intro-screen { background-image: url('inicio.jpeg'); z-index: 70; }
+        /* TELA PRETA INICIAL (AGORA COM LOGO E TEXTO) */
+        #pre-start { 
+            background-color: #050505; 
+            z-index: 90; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+        }
+        
+        .pre-start-logo {
+            width: 180px; 
+            height: auto;
+            margin-bottom: 30px; 
+            opacity: 0.9;
+        }
+
+        .pre-start-text {
+            color: rgba(255, 255, 255, 0.8); 
+            font-size: 14px; 
+            letter-spacing: 6px; 
+            font-family: sans-serif; 
+            text-align: center;
+            animation: pulse 2s infinite; 
+            text-shadow: 2px 2px 10px #000;
+        }
+
+        #initial-video { z-index: 80; display: none; } 
+        
+        #intro-screen { background-image: url('inicio.jpeg'); z-index: 70; display: none; } 
         #intro-screen::after { content: "CLIQUE PARA INICIAR"; }
         #intro-video { z-index: 65; }
         #envelope-screen { background-image: url('envelope.jpeg'); z-index: 60; display: none; }
@@ -115,6 +144,13 @@
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
     <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
 
+    <div id="pre-start" class="full-screen">
+        <img src="logo_transparente.png" alt="Logo" class="pre-start-logo">
+        <div class="pre-start-text">INICIAR TRAILER</div>
+    </div>
+
+    <video id="initial-video" class="full-video" src="tavernas 2.mp4" playsinline></video>
+
     <div id="intro-screen" class="full-screen click-hint"></div>
     <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
     <div id="envelope-screen" class="full-screen click-hint"></div>
@@ -130,7 +166,7 @@
         </div>
 
         <div id="text-container" class="content-box">
-            <div class="top-image-container"><img src="logo-transparente.png" alt="Selo" class="top-image"></div>
+            <div class="top-image-container"><img src="logo_transparente.png" alt="Selo" class="top-image"></div>
             <div class="scroll-area">
                 <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
                 <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
@@ -141,7 +177,7 @@
         </div>
 
         <div id="menu-form-container" class="content-box">
-            <div class="top-image-container"><img src="logo-transparente.png" alt="Selo" class="top-image"></div>
+            <div class="top-image-container"><img src="logo_transparente.png" alt="Selo" class="top-image"></div>
             <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" method="POST" target="hidden_iframe" id="registration-form">
                 <div class="input-group"><label>Qual seu nick?</label><input type="text" name="entry.659203104" required></div>
                 <div class="input-group"><label>Coloque aqui seu número de Whatsapp</label><input type="text" name="entry.1748481037" required></div>
@@ -154,6 +190,8 @@
     </div>
 
     <script>
+        const preStart = document.getElementById('pre-start');
+        const initialVideo = document.getElementById('initial-video');
         const introScreen = document.getElementById('intro-screen');
         const introVideo = document.getElementById('intro-video');
         const envelopeScreen = document.getElementById('envelope-screen');
@@ -163,6 +201,22 @@
         const tavernScreen = document.getElementById('tavern-screen'); 
         const assinaturaVideo = document.getElementById('assinatura-video');
         const sfxTavern = document.getElementById('sfx-tavern');
+
+        // PASSO ZERO: Usuário clica na tela de Iniciar Trailer
+        preStart.addEventListener('click', () => {
+            initialVideo.style.display = 'block';
+            initialVideo.play();
+            preStart.style.opacity = '0';
+            setTimeout(() => { preStart.style.display = 'none'; }, 500);
+        });
+
+        // Quando "tavernas 2.mp4" terminar, ele some e revela a tela "inicio.jpeg"
+        initialVideo.addEventListener('ended', () => {
+            introScreen.style.display = 'flex'; 
+            initialVideo.style.transition = 'opacity 0.5s ease';
+            initialVideo.style.opacity = '0';
+            setTimeout(() => { initialVideo.style.display = 'none'; }, 500);
+        });
 
         introScreen.addEventListener('click', () => {
             introVideo.style.display = 'block';
@@ -211,7 +265,7 @@
             assinaturaVideo.style.display = 'none';
         });
 
-        // LIBERADO: Grava a inscrição no navegador após o retorno do iframe
+        // Grava a inscrição no navegador após o retorno do iframe
         document.getElementById('hidden_iframe').addEventListener('load', function() {
             if (submitted) {
                 localStorage.setItem('inscrito_era_tavernas', 'true');
@@ -219,8 +273,10 @@
             }
         });
 
-        // LIBERADO: Bloqueio de acesso para quem já se inscreveu
+        // Bloqueio de acesso para quem já se inscreveu
         if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
+            document.getElementById('pre-start').style.display = 'none';
+            document.getElementById('initial-video').style.display = 'none';
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('intro-video').style.display = 'none';
             document.getElementById('envelope-screen').style.display = 'none';
