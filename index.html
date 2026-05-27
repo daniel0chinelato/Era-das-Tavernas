@@ -155,7 +155,7 @@
     const assinaturaVideo = document.getElementById('assinatura-video');
     const sfxTavern = document.getElementById('sfx-tavern');
 
-    // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+      /* // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
     if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
         preStart.style.display = 'none';
         introScreen.style.display = 'none';
@@ -209,7 +209,7 @@
         setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
     });
 
-   /* // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
+ // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
     document.getElementById('registration-form').addEventListener('submit', () => {
         localStorage.setItem('inscrito_era_tavernas', 'true');
         document.getElementById('sfx-signing').play();
