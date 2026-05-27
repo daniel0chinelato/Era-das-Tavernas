@@ -142,105 +142,87 @@
         </div>
     </div>
 
-    <script>
-        const preStart = document.getElementById('pre-start');
-        const initialVideo = document.getElementById('initial-video');
-        const introScreen = document.getElementById('intro-screen');
-        const introVideo = document.getElementById('intro-video');
-        const envelopeScreen = document.getElementById('envelope-screen');
-        const romperVideo = document.getElementById('romper-video');
-        const regrasHtml = document.getElementById('text-container');
-        const formContainer = document.getElementById('menu-form-container');
-        const tavernScreen = document.getElementById('tavern-screen'); 
-        const assinaturaVideo = document.getElementById('assinatura-video');
-        const sfxTavern = document.getElementById('sfx-tavern');
+ <script>
+    const preStart = document.getElementById('pre-start');
+    const initialVideo = document.getElementById('initial-video');
+    const introScreen = document.getElementById('intro-screen');
+    const introVideo = document.getElementById('intro-video');
+    const envelopeScreen = document.getElementById('envelope-screen');
+    const romperVideo = document.getElementById('romper-video');
+    const regrasHtml = document.getElementById('text-container');
+    const formContainer = document.getElementById('menu-form-container');
+    const tavernScreen = document.getElementById('tavern-screen'); 
+    const assinaturaVideo = document.getElementById('assinatura-video');
+    const sfxTavern = document.getElementById('sfx-tavern');
 
-        preStart.addEventListener('click', () => {
-            initialVideo.style.display = 'block';
-            initialVideo.play();
-            preStart.style.opacity = '0';
-            setTimeout(() => { preStart.style.display = 'none'; }, 500);
-        });
+    // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+    if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
+        preStart.style.display = 'none';
+        introScreen.style.display = 'none';
+        envelopeScreen.style.display = 'none';
+        tavernScreen.style.opacity = '1';
+        tavernScreen.style.backgroundImage = "url('final.jpeg')";
+        document.getElementById('success-message').style.display = 'block';
+    }
 
-        initialVideo.addEventListener('ended', () => {
-            introScreen.style.display = 'flex'; 
-            initialVideo.style.display = 'none';
-        });
+    preStart.addEventListener('click', () => {
+        initialVideo.style.display = 'block';
+        initialVideo.play();
+        preStart.style.opacity = '0';
+        setTimeout(() => { preStart.style.display = 'none'; }, 500);
+    });
 
-        introScreen.addEventListener('click', () => {
-            introVideo.style.display = 'block';
-            introVideo.play();
-            introScreen.style.opacity = '0';
-            setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
-        });
+    initialVideo.addEventListener('ended', () => {
+        introScreen.style.display = 'flex'; 
+        initialVideo.style.display = 'none';
+    });
 
-        introVideo.addEventListener('ended', () => {
-            sfxTavern.volume = 0.3;
-            sfxTavern.play();
-            envelopeScreen.style.display = 'flex'; 
-            introVideo.style.display = 'none'; 
-        });
+    introScreen.addEventListener('click', () => {
+        introVideo.style.display = 'block';
+        introVideo.play();
+        introScreen.style.opacity = '0';
+        setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
+    });
 
-        envelopeScreen.addEventListener('click', () => {
-            romperVideo.style.display = 'block';
-            romperVideo.play();
-            envelopeScreen.style.opacity = '0';
-            setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
-        });
+    introVideo.addEventListener('ended', () => {
+        sfxTavern.volume = 0.3;
+        sfxTavern.play();
+        envelopeScreen.style.display = 'flex'; 
+        introVideo.style.display = 'none'; 
+    });
 
-        romperVideo.addEventListener('ended', () => {
-            tavernScreen.style.opacity = '1'; 
-            romperVideo.style.display = 'none';
-            regrasHtml.classList.add('show-page');
-        });
+    envelopeScreen.addEventListener('click', () => {
+        romperVideo.style.display = 'block';
+        romperVideo.play();
+        envelopeScreen.style.opacity = '0';
+        setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
+    });
 
-        document.getElementById('btn-next').addEventListener('click', () => {
-            regrasHtml.classList.remove('show-page');
-            setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
-        });
+    romperVideo.addEventListener('ended', () => {
+        tavernScreen.style.opacity = '1'; 
+        romperVideo.style.display = 'none';
+        regrasHtml.classList.add('show-page');
+    });
 
-        document.getElementById('registration-form').addEventListener('submit', () => {
-            document.getElementById('sfx-signing').play();
-            formContainer.classList.remove('show-page');
-            assinaturaVideo.style.display = 'block';
-            assinaturaVideo.play();
-        });
+    document.getElementById('btn-next').addEventListener('click', () => {
+        regrasHtml.classList.remove('show-page');
+        setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
+    });
 
-        assinaturaVideo.addEventListener('ended', () => {
-            tavernScreen.style.backgroundImage = "url('final.jpeg')";
-            document.getElementById('success-message').style.display = 'block';
-            assinaturaVideo.style.display = 'none';
-        });
+    // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
+    document.getElementById('registration-form').addEventListener('submit', () => {
+        localStorage.setItem('inscrito_era_tavernas', 'true');
+        document.getElementById('sfx-signing').play();
+        formContainer.classList.remove('show-page');
+        assinaturaVideo.style.display = 'block';
+        assinaturaVideo.play();
+    });
 
-
-  /* ===================================================================
-        CÓDIGO COMENTADO PARA PERMITIR MÚLTIPLOS TESTES:
-        =================================================================== */
-        
-        // Grava a inscrição no navegador após o retorno do iframe
-        document.getElementById('hidden_iframe').addEventListener('load', function() {
-            if (submitted) {
-                localStorage.setItem('inscrito_era_tavernas', 'true');
-                submitted = false; 
-            }
-        });
-
-        // Bloqueio de acesso para quem já se inscreveu
-        if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
-            document.getElementById('pre-start').style.display = 'none';
-            document.getElementById('initial-video').style.display = 'none';
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('intro-video').style.display = 'none';
-            document.getElementById('envelope-screen').style.display = 'none';
-            document.getElementById('romper-video').style.display = 'none';
-            document.getElementById('text-container').style.display = 'none';
-            document.getElementById('menu-form-container').style.display = 'none';
-            
-            tavernScreen.style.opacity = '1';
-            tavernScreen.style.backgroundImage = "url('final.jpeg')";
-            document.getElementById('success-message').style.display = 'block';
-        }
-
-    </script>
+    assinaturaVideo.addEventListener('ended', () => {
+        tavernScreen.style.backgroundImage = "url('final.jpeg')";
+        document.getElementById('success-message').style.display = 'block';
+        assinaturaVideo.style.display = 'none';
+    });
+</script>
 </body>
 </html>
