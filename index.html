@@ -6,15 +6,11 @@
     <title>Inscrição | Tavernas</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        /* =========================================
-           1. RESET E BASE
-           ========================================= */
+        /* 1. RESET E BASE */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
         body, html { height: 100%; overflow: hidden; background-color: #050505; }
 
-        /* =========================================
-           2. CLASSES PARA TELAS CHEIAS (VÍDEOS E IMAGENS)
-           ========================================= */
+        /* 2. CLASSES PARA TELAS CHEIAS */
         .full-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background-size: cover; background-position: center; background-repeat: no-repeat;
@@ -28,93 +24,54 @@
         }
 
         .click-hint::after {
+            content: "CLIQUE PARA INICIAR";
             color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
             margin-top: 40vh; font-family: sans-serif; text-align: center;
             animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000;
+        }
+
+        /* Nova classe para o feedback visual de romper o selo */
+        .romper-selo-hint::after {
+            content: "ROMPER SELO";
+            position: absolute;
+            top: 65%; /* Ajuste a posição vertical conforme a sua imagem */
+            color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
+            font-family: sans-serif; text-align: center;
+            animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000;
+            pointer-events: none;
         }
 
         @keyframes pulse {
             0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; }
         }
 
-        /* =========================================
-           3. CAMADAS (Z-INDEX) E TELA INICIAL
-           ========================================= */
-        /* TELA PRETA INICIAL (AGORA COM LOGO E TEXTO) */
-        #pre-start { 
-            background-color: #050505; 
-            z-index: 90; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-        }
-        
-        .pre-start-logo {
-            width: 180px; 
-            height: auto;
-            margin-bottom: 30px; 
-            opacity: 0.9;
-        }
-
-        .pre-start-text {
-            color: rgba(255, 255, 255, 0.8); 
-            font-size: 14px; 
-            letter-spacing: 6px; 
-            font-family: sans-serif; 
-            text-align: center;
-            animation: pulse 2s infinite; 
-            text-shadow: 2px 2px 10px #000;
-        }
+        /* 3. CAMADAS */
+        #pre-start { background-color: #050505; z-index: 90; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .pre-start-logo { width: 180px; height: auto; margin-bottom: 30px; opacity: 0.9; }
+        .pre-start-text { color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 6px; font-family: sans-serif; text-align: center; animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000; }
 
         #initial-video { z-index: 80; display: none; } 
-        
         #intro-screen { background-image: url('inicio.jpeg'); z-index: 70; display: none; } 
-        #intro-screen::after { content: "CLIQUE PARA INICIAR"; }
         #intro-video { z-index: 65; }
         #envelope-screen { background-image: url('envelope.jpeg'); z-index: 60; display: none; }
         #romper-video { z-index: 55; }
         #assinatura-video { z-index: 100; } 
 
-        /* =========================================
-           4. TAVERNA E NAVEGAÇÃO
-           ========================================= */
-        #tavern-screen {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url('regras.jpeg'); background-size: cover; background-position: center;
-            display: flex; align-items: center; justify-content: center; z-index: 10;
-            opacity: 0; transition: opacity 0.5s ease;
-        }
-
-        .content-box {
-            width: 90%; max-width: 420px; height: 50vh; padding: 0 20px 0 45px; 
-            margin-left: 4%; margin-top: calc(15vh + 80px); 
-            background: transparent !important; box-shadow: none !important; border: none !important;
-            position: absolute; transition: all 0.8s ease;
-            display: flex; flex-direction: column;
-        }
-
-        .top-image-container {
-            position: absolute; top: -60px; left: -50px; z-index: 20; pointer-events: none;
-        }
-
-        .top-image { 
-            width: 80px; height: auto; object-fit: contain; opacity: 0.8; 
-        }
+        /* 4. TAVERNA E NAVEGAÇÃO */
+        #tavern-screen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url('regras.jpeg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; z-index: 10; opacity: 0; transition: opacity 0.5s ease; }
+        .content-box { width: 90%; max-width: 420px; height: 50vh; padding: 0 20px 0 45px; margin-left: 4%; margin-top: calc(15vh + 80px); background: transparent !important; box-shadow: none !important; border: none !important; position: absolute; transition: all 0.8s ease; display: flex; flex-direction: column; }
+        .top-image-container { position: absolute; top: -60px; left: -50px; z-index: 20; pointer-events: none; }
+        .top-image { width: 80px; height: auto; object-fit: contain; opacity: 0.8; }
 
         #text-container { opacity: 0; pointer-events: none; transform: translateY(30px); }
         #text-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
-        
         #menu-form-container { opacity: 0; pointer-events: none; transform: translateY(30px); justify-content: center; }
         #menu-form-container.show-page { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-        /* =========================================
-           5. TIPOGRAFIA E ELEMENTOS
-           ========================================= */
+        /* 5. ELEMENTOS DE FORMULÁRIO */
         .scroll-area { flex: 1; overflow-y: auto; margin-top: 10px; margin-bottom: 15px; padding-right: 15px; }
         .scroll-area::-webkit-scrollbar { width: 8px; }
         .scroll-area::-webkit-scrollbar-thumb { background: #8c2425; border-radius: 4px; }
-
         .scroll-area p { color: #000000; font-size: 14px; line-height: 1.6; margin-bottom: 15px; font-weight: bold; }
         .scroll-area h4 { color: #000000; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
 
@@ -122,16 +79,7 @@
         .input-group label { display: block; color: #000000; margin-bottom: 5px; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
         .input-group input { width: 100%; padding: 8px 5px; background: transparent; border: none; border-bottom: 2px solid #000000; color: #000000; font-size: 11px; font-weight: bold; outline: none; }
 
-        /* =========================================
-           6. BOTÃO MINIMALISTA
-           ========================================= */
-        .submit-btn { 
-            flex-shrink: 0; width: 100%; padding: 12px; background-color: transparent; 
-            color: #000000; border: 1.8px solid #000000; font-size: 10px; 
-            font-weight: 700; cursor: pointer; transition: all 0.4s ease; 
-            margin-top: auto; text-transform: uppercase; letter-spacing: 5px; outline: none;
-        }
-
+        .submit-btn { flex-shrink: 0; width: 100%; padding: 12px; background-color: transparent; color: #000000; border: 1.8px solid #000000; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.4s ease; margin-top: auto; text-transform: uppercase; letter-spacing: 5px; outline: none; }
         .submit-btn:hover { background-color: rgba(0, 0, 0, 0.05); letter-spacing: 6px; }
         
         #success-message { display: none; position: absolute; top: 12%; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; z-index: 120; }
@@ -150,10 +98,11 @@
     </div>
 
     <video id="initial-video" class="full-video" src="tavernas 2.mp4" playsinline></video>
-
     <div id="intro-screen" class="full-screen click-hint"></div>
     <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
-    <div id="envelope-screen" class="full-screen click-hint"></div>
+    
+    <div id="envelope-screen" class="full-screen romper-selo-hint"></div>
+    
     <video id="romper-video" class="full-video" src="romper-selo.mp4" playsinline></video>
     <video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline></video>
 
@@ -168,10 +117,14 @@
         <div id="text-container" class="content-box">
             <div class="top-image-container"><img src="logo-transparente.png" alt="Selo" class="top-image"></div>
             <div class="scroll-area">
-                <p><h4>Conclamamos os probos combatentes das eras passadas para a magna justa TAVERNAS.</h4></p>
-                <p><strong>Somente os paladinos de comprovada bravura, cujo vigor alcance a monta de 1200 ELO ou mor, far-se-ão dignos de selar este pacto.</strong></p>
-                <p>Vossa glória há de ser forjada sob as penumbras de nossa estalagem. E sabei vós: caso a ruína vos acometa no prélio, as antigas leis vos facultam rogar pela mesma divindade, para que a vossa vindita se cumpra na arena.</p> 
-                <p>Aponde vossa insígnia de sangue neste pergaminho e aceitai o vosso fado.</p>
+                <p><h4>TAVERNAS: Onde a História é Escrita pelo Sangue</h4></p>
+                <p><strong>Nas sombras de uma velha taverna, onde a madeira range sob o peso de segredos de eras esquecidas, a luz das velas revela apenas os estrategistas que vieram selar o destino dos impérios.</strong></p> 
+                <p><strong>I. OF MORTALS (Fase de Grupos)</strong></p>
+                <p>O batismo de fogo. Apenas os 4 melhores de cada grupo sobrevivem.</p>
+                <p><strong>II. OF DEMIGODS (Fase de Mata-Mata)</strong></p>
+                <p>Séries MD3. Cada jogador terá 1 banimento de Deus e 1 de Mapa.</p>
+                <p><strong>III. OF TITANS (A Grande Final)</strong></p>
+                <p>Série MD5. A elite terá direito a 2 banimentos de Deus e 2 de Mapa.</p>
             </div>
             <button class="submit-btn" id="btn-next">Preencher Contrato</button>
         </div>
@@ -180,8 +133,8 @@
             <div class="top-image-container"><img src="logo-transparente.png" alt="Selo" class="top-image"></div>
             <form action="https://docs.google.com/forms/d/e/1FAIpQLSfyVPnOa5jB_RcEgjrFo1bVDQdPEIqypMLNMNInW6WT5deNKw/formResponse" method="POST" target="hidden_iframe" id="registration-form">
                 <div class="input-group"><label>Qual seu nick?</label><input type="text" name="entry.659203104" required></div>
-                <div class="input-group"><label>Coloque aqui seu número de Whatsapp</label><input type="text" name="entry.1748481037" required></div>
-                <div class="input-group"><label>Insira o link da sua conta do aomstats.io</label><input type="text" name="entry.1264482586" required></div>
+                <div class="input-group"><label>Whatsapp</label><input type="text" name="entry.1748481037" required></div>
+                <div class="input-group"><label>Link aomstats.io</label><input type="text" name="entry.1264482586" required></div>
                 <div class="input-group"><label>Qual seu elo?</label><input type="text" name="entry.1329515624" required></div>
                 <button type="submit" class="submit-btn" id="btn-submit">Assinar Contrato</button>
             </form>
@@ -202,7 +155,6 @@
         const assinaturaVideo = document.getElementById('assinatura-video');
         const sfxTavern = document.getElementById('sfx-tavern');
 
-        // PASSO ZERO: Usuário clica na tela de Iniciar Trailer
         preStart.addEventListener('click', () => {
             initialVideo.style.display = 'block';
             initialVideo.play();
@@ -210,12 +162,9 @@
             setTimeout(() => { preStart.style.display = 'none'; }, 500);
         });
 
-        // Quando "tavernas 2.mp4" terminar, ele some e revela a tela "inicio.jpeg"
         initialVideo.addEventListener('ended', () => {
             introScreen.style.display = 'flex'; 
-            initialVideo.style.transition = 'opacity 0.5s ease';
-            initialVideo.style.opacity = '0';
-            setTimeout(() => { initialVideo.style.display = 'none'; }, 500);
+            initialVideo.style.display = 'none';
         });
 
         introScreen.addEventListener('click', () => {
@@ -250,9 +199,7 @@
             setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
         });
 
-        let submitted = false;
         document.getElementById('registration-form').addEventListener('submit', () => {
-            submitted = true;
             document.getElementById('sfx-signing').play();
             formContainer.classList.remove('show-page');
             assinaturaVideo.style.display = 'block';
@@ -265,7 +212,8 @@
             assinaturaVideo.style.display = 'none';
         });
 
-        /* ===================================================================
+
+  /* ===================================================================
         CÓDIGO COMENTADO PARA PERMITIR MÚLTIPLOS TESTES:
         =================================================================== */
         
@@ -292,7 +240,7 @@
             tavernScreen.style.backgroundImage = "url('final.jpeg')";
             document.getElementById('success-message').style.display = 'block';
         }
-    
+
     </script>
 </body>
 </html>
