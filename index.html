@@ -30,11 +30,10 @@
             animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000;
         }
 
-        /* Nova classe para o feedback visual de romper o selo */
         .romper-selo-hint::after {
             content: "CLIQUE PARA ROMPER O SELO";
             position: absolute;
-            top: 65%; /* Ajuste a posição vertical conforme a sua imagem */
+            top: 65%;
             color: rgba(255, 255, 255, 0.8); font-size: 14px; letter-spacing: 5px; 
             font-family: sans-serif; text-align: center;
             animation: pulse 2s infinite; text-shadow: 2px 2px 10px #000;
@@ -82,15 +81,20 @@
         .submit-btn { flex-shrink: 0; width: 100%; padding: 12px; background-color: transparent; color: #000000; border: 1.8px solid #000000; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.4s ease; margin-top: auto; text-transform: uppercase; letter-spacing: 5px; outline: none; }
         .submit-btn:hover { background-color: rgba(0, 0, 0, 0.05); letter-spacing: 6px; }
         
-        #success-message { display: none; position: absolute; top: 12%; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; z-index: 120; }
-        #success-message h3 { color: #ffffff; font-size: 26px; margin-bottom: 15px; letter-spacing: 2px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        #success-message { display: none; position: absolute; top: 5%; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; text-align: center; z-index: 120; }
+        #success-message h3 { color: #ffffff; font-size: 26px; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
         #success-message p { color: #ffffff; font-size: 16px; font-weight: bold; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        
+        /* 6. ESTILOS DO PIX NA TELA FINAL */
+        .pix-container { margin: 15px auto; background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 8px; border: 1px solid #8c2425; max-width: 280px; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
+        .pix-container p { font-size: 13px !important; margin-bottom: 10px; }
+        .pix-qr { width: 160px; height: 160px; margin: 0 auto 15px auto; display: block; border: 2px solid #fff; border-radius: 4px; }
+        .pix-btn { color: #ffffff; border-color: #ffffff; margin-top: 0; }
+        .pix-btn:hover { background-color: rgba(255, 255, 255, 0.15); }
     </style>
 </head>
 <body>
 
-   
-    
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
     <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
 
@@ -111,9 +115,16 @@
     <div id="tavern-screen">
         <div id="success-message">
             <h3>O PACTO FOI SELADO!</h3>
-            <p>Vosso nome foi gravado a sangue no códice.</p><br>
+            <p>Vosso nome foi gravado a sangue no códice.</p>
+            
+            <div class="pix-container">
+                <p>Taxa de Inscrição: R$ 10,00</p>
+                <img src="qrcode.jpg" alt="QR Code PIX" class="pix-qr">
+                <button id="btn-copy-pix" class="submit-btn pix-btn">Copiar Chave PIX</button>
+            </div>
+
             <p>Entre no nosso grupo do campeonato no whatsapp:</p>
-            <p><a href="https://chat.whatsapp.com/BgApNmISFUU5sxio84bGwI" style="color: white; font-align: center;">Clique aqui!</a></p>
+            <p><a href="https://chat.whatsapp.com/BgApNmISFUU5sxio84bGwI" style="color: white; text-decoration: underline;">Clique aqui!</a></p>
         </div>
 
         <div id="text-container" class="content-box">
@@ -152,7 +163,7 @@
         </div>
     </div>
 
- <script>
+<script>
     const preStart = document.getElementById('pre-start');
     const initialVideo = document.getElementById('initial-video');
     const introScreen = document.getElementById('intro-screen');
@@ -165,7 +176,7 @@
     const assinaturaVideo = document.getElementById('assinatura-video');
     const sfxTavern = document.getElementById('sfx-tavern');
 
-       // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+    // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
     if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
         preStart.style.display = 'none';
         introScreen.style.display = 'none';
@@ -219,7 +230,7 @@
         setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
     });
 
- // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
+    // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
     document.getElementById('registration-form').addEventListener('submit', () => {
         localStorage.setItem('inscrito_era_tavernas', 'true');
         document.getElementById('sfx-signing').play();
@@ -233,6 +244,28 @@
         document.getElementById('success-message').style.display = 'block';
         assinaturaVideo.style.display = 'none';
     }); 
+
+    // LÓGICA DO BOTÃO COPIAR PIX
+    const btnCopyPix = document.getElementById('btn-copy-pix');
+    const chavePix = "00020126810014BR.GOV.BCB.PIX0136212724a9-d3a4-4256-99e0-812b2d9ed7530219Inscrição  TAVERNAS520400005303986540510.005802BR5925Daniel Chinelato Sordo Ra6009SAO PAULO62140510NAK5oGaQCQ63044C7C"; // <-- COLOQUE SUA CHAVE PIX REAL AQUI
+
+    btnCopyPix.addEventListener('click', () => {
+        navigator.clipboard.writeText(chavePix).then(() => {
+            const originalText = btnCopyPix.innerText;
+            btnCopyPix.innerText = "CHAVE COPIADA!";
+            btnCopyPix.style.backgroundColor = "#8c2425";
+            btnCopyPix.style.borderColor = "#8c2425";
+            
+            setTimeout(() => {
+                btnCopyPix.innerText = originalText;
+                btnCopyPix.style.backgroundColor = "transparent";
+                btnCopyPix.style.borderColor = "#ffffff";
+            }, 3000);
+        }).catch(err => {
+            console.error('Erro ao copiar a chave PIX: ', err);
+            alert("Não foi possível copiar a chave automaticamente.");
+        });
+    });
 </script>
 </body>
 </html>
