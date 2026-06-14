@@ -82,15 +82,20 @@
         .submit-btn { flex-shrink: 0; width: 100%; padding: 12px; background-color: transparent; color: #000000; border: 1.8px solid #000000; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.4s ease; margin-top: auto; text-transform: uppercase; letter-spacing: 5px; outline: none; }
         .submit-btn:hover { background-color: rgba(0, 0, 0, 0.05); letter-spacing: 6px; }
         
-        #success-message { display: none; position: absolute; top: 12%; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; z-index: 120; }
+        /* 6. ESTILOS DA TELA DE SUCESSO (PAGAMENTO E QR CODE) */
+        #success-message { display: none; position: absolute; top: 12%; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; text-align: center; z-index: 120; }
         #success-message h3 { color: #ffffff; font-size: 26px; margin-bottom: 15px; letter-spacing: 2px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
         #success-message p { color: #ffffff; font-size: 16px; font-weight: bold; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        
+        .qrcode-img { width: 160px; height: auto; margin: 15px auto; display: block; border: 2px solid #000; border-radius: 8px; box-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        .copy-btn { max-width: 250px; margin: 10px auto 20px auto; display: block; color: #ffffff; border-color: #ffffff; background-color: rgba(0, 0, 0, 0.6); }
+        .copy-btn:hover { background-color: rgba(255, 255, 255, 0.2); }
+        .info-text { font-size: 13px !important; color: #cccccc !important; margin-top: 10px; }
+
     </style>
 </head>
 <body>
 
-   
-    
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
     <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
 
@@ -109,11 +114,18 @@
     <video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline></video>
 
     <div id="tavern-screen">
+        
         <div id="success-message">
             <h3>O PACTO FOI SELADO!</h3>
-            <p>Vosso nome foi gravado a sangue no códice.</p><br>
+            <p>Vosso nome foi gravado a sangue no códice.</p>
+            
+            <img src="qrcode.jpg" alt="QR Code PIX" class="qrcode-img">
+            <button id="btn-copy-pix" class="submit-btn copy-btn">Copiar Chave PIX</button>
+            
+            <p class="info-text">Valor da inscrição: 10 reais.<br>Mandar comprovante + nick no grupo do campeonato.</p>
+            <br>
             <p>Entre no nosso grupo do campeonato no whatsapp:</p>
-            <p><a href="https://chat.whatsapp.com/BgApNmISFUU5sxio84bGwI" style="color: white; font-align: center;">Clique aqui!</a></p>
+            <p><a href="https://chat.whatsapp.com/BgApNmISFUU5sxio84bGwI" style="color: white; text-align: center;">Clique aqui!</a></p>
         </div>
 
         <div id="text-container" class="content-box">
@@ -152,7 +164,7 @@
         </div>
     </div>
 
- <script>
+<script>
     const preStart = document.getElementById('pre-start');
     const initialVideo = document.getElementById('initial-video');
     const introScreen = document.getElementById('intro-screen');
@@ -165,14 +177,14 @@
     const assinaturaVideo = document.getElementById('assinatura-video');
     const sfxTavern = document.getElementById('sfx-tavern');
 
-       // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+      !-- // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
     if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
         preStart.style.display = 'none';
         introScreen.style.display = 'none';
         envelopeScreen.style.display = 'none';
         tavernScreen.style.opacity = '1';
         tavernScreen.style.backgroundImage = "url('final.jpeg')";
-        document.getElementById('success-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'block'; --!
     }
 
     preStart.addEventListener('click', () => {
@@ -233,6 +245,26 @@
         document.getElementById('success-message').style.display = 'block';
         assinaturaVideo.style.display = 'none';
     }); 
+
+    // LÓGICA DO BOTÃO DE COPIAR CHAVE PIX
+    document.getElementById('btn-copy-pix').addEventListener('click', () => {
+        // SUBSTITUA O TEXTO ABAIXO PELA SUA CHAVE PIX REAL
+        const chavePix = "00020126810014BR.GOV.BCB.PIX0136212724a9-d3a4-4256-99e0-812b2d9ed7530219Inscrição  TAVERNAS520400005303986540510.005802BR5925Daniel Chinelato Sordo Ra6009SAO PAULO62140510NAK5oGaQCQ63044C7C"; 
+        
+        navigator.clipboard.writeText(chavePix).then(() => {
+            const btn = document.getElementById('btn-copy-pix');
+            const textoOriginal = btn.innerText;
+            btn.innerText = "COPIADO COM SUCESSO!";
+            
+            // Retorna o texto ao normal após 3 segundos
+            setTimeout(() => { 
+                btn.innerText = textoOriginal; 
+            }, 3000);
+        }).catch(err => {
+            alert("Erro ao copiar a chave: " + err);
+        });
+    });
+
 </script>
 </body>
 </html>
