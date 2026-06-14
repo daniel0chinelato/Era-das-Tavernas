@@ -107,14 +107,10 @@
         <div class="pre-start-text">INICIAR TRAILER</div>
     </div>
 
-    <video id="initial-video" class="full-video" src="tavernas_2_0.mp4" playsinline></video>
-    <div id="intro-screen" class="full-screen click-hint"></div>
-    <video id="intro-video" class="full-video" src="animation.mp4" playsinline></video>
-    
-    <div id="envelope-screen" class="full-screen romper-selo-hint"></div>
-    
-    <video id="romper-video" class="full-video" src="romper-selo.mp4" playsinline></video>
-    <video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline></video>
+   <video id="initial-video" class="full-video" src="tavernas_2.mp4" playsinline preload="auto"></video>
+<video id="intro-video" class="full-video" src="animation.mp4" playsinline preload="auto"></video>
+<video id="romper-video" class="full-video" src="romper-selo.mp4" playsinline preload="auto"></video>
+<video id="assinatura-video" class="full-video" src="assinatura-final.mp4" playsinline preload="auto"></video>
 
     <div id="tavern-screen">
        <div id="success-message">
@@ -166,7 +162,7 @@
         </div>
     </div>
 
- <script>
+<script>
     const preStart = document.getElementById('pre-start');
     const initialVideo = document.getElementById('initial-video');
     const introScreen = document.getElementById('intro-screen');
@@ -179,7 +175,7 @@
     const assinaturaVideo = document.getElementById('assinatura-video');
     const sfxTavern = document.getElementById('sfx-tavern');
 
-       // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+    // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
     if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
         preStart.style.display = 'none';
         introScreen.style.display = 'none';
@@ -191,9 +187,13 @@
 
     preStart.addEventListener('click', () => {
         initialVideo.style.display = 'block';
-        initialVideo.play();
         preStart.style.opacity = '0';
         setTimeout(() => { preStart.style.display = 'none'; }, 500);
+        
+        let playPromise = initialVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => console.log("Aguardando vídeo 1...", error));
+        }
     });
 
     initialVideo.addEventListener('ended', () => {
@@ -203,23 +203,34 @@
 
     introScreen.addEventListener('click', () => {
         introVideo.style.display = 'block';
-        introVideo.play();
         introScreen.style.opacity = '0';
         setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
+        
+        let playPromise = introVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => console.log("Aguardando vídeo 2...", error));
+        }
     });
 
     introVideo.addEventListener('ended', () => {
         sfxTavern.volume = 0.3;
-        sfxTavern.play();
+        let audioPromise = sfxTavern.play();
+        if (audioPromise !== undefined) {
+            audioPromise.catch(e => console.log("Áudio bloqueado"));
+        }
         envelopeScreen.style.display = 'flex'; 
         introVideo.style.display = 'none'; 
     });
 
     envelopeScreen.addEventListener('click', () => {
         romperVideo.style.display = 'block';
-        romperVideo.play();
         envelopeScreen.style.opacity = '0';
         setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
+        
+        let playPromise = romperVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => console.log("Aguardando vídeo 3...", error));
+        }
     });
 
     romperVideo.addEventListener('ended', () => {
@@ -233,13 +244,22 @@
         setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
     });
 
- // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
+    // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO E VÍDEO FINAL
     document.getElementById('registration-form').addEventListener('submit', () => {
         localStorage.setItem('inscrito_era_tavernas', 'true');
-        document.getElementById('sfx-signing').play();
+        
+        let audioPlay = document.getElementById('sfx-signing').play();
+        if (audioPlay !== undefined) {
+            audioPlay.catch(e => {});
+        }
+        
         formContainer.classList.remove('show-page');
         assinaturaVideo.style.display = 'block';
-        assinaturaVideo.play();
+        
+        let playPromise = assinaturaVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => console.log("Aguardando vídeo 4...", error));
+        }
     });
 
     assinaturaVideo.addEventListener('ended', () => {
@@ -248,7 +268,7 @@
         assinaturaVideo.style.display = 'none';
     }); 
 
-     // LÓGICA DO BOTÃO DE COPIAR CHAVE PIX
+    // LÓGICA DO BOTÃO DE COPIAR CHAVE PIX
     document.getElementById('btn-copy-pix').addEventListener('click', () => {
         // COLOCAR SUA CHAVE PIX AQUI ENTRE AS ASPAS
         const chavePix = "SUA_CHAVE_PIX_AQUI"; 
@@ -264,6 +284,7 @@
         }).catch(err => {
             alert("Erro ao copiar a chave: " + err);
         });
+    });
     
 </script>
 </body>
