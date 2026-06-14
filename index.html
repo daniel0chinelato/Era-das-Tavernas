@@ -95,9 +95,6 @@
 </head>
 <body>
 
-    <button id="dev-reset-btn" style="position: fixed; top: 10px; left: 10px; z-index: 9999; padding: 10px 15px; background-color: #ff0000; color: white; border: 2px solid white; font-weight: bold; font-family: sans-serif; cursor: pointer; border-radius: 5px;">
-        RESETAR BLOQUEIO (DEV)
-    </button>
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
     <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
 
@@ -122,6 +119,7 @@
             
             <div class="pix-container">
                 <p>Taxa de Inscrição: R$ 10,00</p>
+                 <strong><p>Enviar comprovante + nick no grupo do campeonato</p></strong>
                 <img src="qrcode.jpeg" alt="QR Code PIX" class="pix-qr">
                 <button id="btn-copy-pix" class="submit-btn pix-btn">Copiar Chave PIX</button>
             </div>
@@ -167,14 +165,110 @@
     </div>
 
 <script>
-    // ==========================================
-    // APAGAR DEPOIS: LÓGICA DO BOTÃO DE RESET DEV
-    document.getElementById('dev-reset-btn').addEventListener('click', () => {
-        localStorage.removeItem('inscrito_era_tavernas');
-        alert('Bloqueio de inscrição resetado! A página será recarregada.');
-        location.reload();
-    });
-    // ==========================================
-
     const preStart = document.getElementById('pre-start');
     const initialVideo = document.getElementById('initial-video');
+    const introScreen = document.getElementById('intro-screen');
+    const introVideo = document.getElementById('intro-video');
+    const envelopeScreen = document.getElementById('envelope-screen');
+    const romperVideo = document.getElementById('romper-video');
+    const regrasHtml = document.getElementById('text-container');
+    const formContainer = document.getElementById('menu-form-container');
+    const tavernScreen = document.getElementById('tavern-screen'); 
+    const assinaturaVideo = document.getElementById('assinatura-video');
+    const sfxTavern = document.getElementById('sfx-tavern');
+
+    // VERIFICAÇÃO DE BLOQUEIO AO CARREGAR A PÁGINA
+    if(localStorage.getItem('inscrito_era_tavernas') === 'true') {
+        preStart.style.display = 'none';
+        introScreen.style.display = 'none';
+        envelopeScreen.style.display = 'none';
+        tavernScreen.style.opacity = '1';
+        tavernScreen.style.backgroundImage = "url('final.jpeg')";
+        document.getElementById('success-message').style.display = 'block';
+    }
+
+    preStart.addEventListener('click', () => {
+        initialVideo.style.display = 'block';
+        initialVideo.play();
+        preStart.style.opacity = '0';
+        setTimeout(() => { preStart.style.display = 'none'; }, 500);
+    });
+
+    initialVideo.addEventListener('ended', () => {
+        introScreen.style.display = 'flex'; 
+        initialVideo.style.display = 'none';
+    });
+
+    introScreen.addEventListener('click', () => {
+        introVideo.style.display = 'block';
+        introVideo.play();
+        introScreen.style.opacity = '0';
+        setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
+    });
+
+    introVideo.addEventListener('ended', () => {
+        sfxTavern.volume = 0.3;
+        sfxTavern.play();
+        envelopeScreen.style.display = 'flex'; 
+        introVideo.style.display = 'none'; 
+    });
+
+    envelopeScreen.addEventListener('click', () => {
+        romperVideo.style.display = 'block';
+        romperVideo.play();
+        envelopeScreen.style.opacity = '0';
+        setTimeout(() => { envelopeScreen.style.display = 'none'; }, 500);
+    });
+
+    romperVideo.addEventListener('ended', () => {
+        tavernScreen.style.opacity = '1'; 
+        romperVideo.style.display = 'none';
+        regrasHtml.classList.add('show-page');
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+        regrasHtml.classList.remove('show-page');
+        setTimeout(() => { formContainer.classList.add('show-page'); }, 500);
+    });
+
+    // GRAVAÇÃO DO LOCALSTORAGE APÓS O ENVIO
+    document.getElementById('registration-form').addEventListener('submit', () => {
+        localStorage.setItem('inscrito_era_tavernas', 'true');
+        document.getElementById('sfx-signing').play();
+        formContainer.classList.remove('show-page');
+        assinaturaVideo.style.display = 'block';
+        assinaturaVideo.play();
+    });
+
+    assinaturaVideo.addEventListener('ended', () => {
+        tavernScreen.style.backgroundImage = "url('final.jpeg')";
+        document.getElementById('success-message').style.display = 'block';
+        assinaturaVideo.style.display = 'none';
+    }); 
+
+    // LÓGICA DO BOTÃO COPIAR PIX
+    const btnCopyPix = document.getElementById('btn-copy-pix');
+    const chavePix = "SUA_CHAVE_PIX_AQUI"; // <-- COLOQUE SUA CHAVE PIX REAL AQUI
+
+    btnCopyPix.addEventListener('click', () => {
+        navigator.clipboard.writeText(chavePix).then(() => {
+            const originalText = btnCopyPix.innerText;
+            btnCopyPix.innerText = "CHAVE COPIADA!";
+            btnCopyPix.style.backgroundColor = "#8c2425";
+            btnCopyPix.style.borderColor = "#8c2425";
+            
+            setTimeout(() => {
+                btnCopyPix.innerText = originalText;
+                btnCopyPix.style.backgroundColor = "transparent";
+                btnCopyPix.style.borderColor = "#ffffff";
+            }, 3000);
+        }).catch(err => {
+            console.error('Erro ao copiar a chave PIX: ', err);
+            alert("Não foi possível copiar a chave automaticamente.");
+        });
+    });
+</script>
+</body>
+</html>
+
+```
