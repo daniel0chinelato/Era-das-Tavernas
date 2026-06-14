@@ -96,7 +96,7 @@
 <body>
 
     <audio id="sfx-tavern" src="https://actions.google.com/sounds/v1/crowds/voices_murmur.ogg" loop preload="auto"></audio>
-    <audio id="sfx-signing" src="assinatura.mp3" preload="auto"></audio>
+    <audio id="sfx-signing" src="_assinatura.mp3" preload="auto"></audio>
 
     <div id="pre-start" class="full-screen">
         <img src="logo_transparente.png" alt="Logo" class="pre-start-logo">
@@ -248,7 +248,7 @@
 
     // LÓGICA DO BOTÃO COPIAR PIX
     const btnCopyPix = document.getElementById('btn-copy-pix');
-    const chavePix = "SUA_CHAVE_PIX_AQUI"; // <-- COLOQUE SUA CHAVE PIX REAL AQUI
+    const chavePix = "00020126810014BR.GOV.BCB.PIX0136212724a9-d3a4-4256-99e0-812b2d9ed7530219Inscrição  TAVERNAS520400005303986540510.005802BR5925Daniel Chinelato Sordo Ra6009SAO PAULO62140510NAK5oGaQCQ63044C7C"; // <-- COLOQUE SUA CHAVE PIX REAL AQUI
 
     btnCopyPix.addEventListener('click', () => {
         navigator.clipboard.writeText(chavePix).then(() => {
